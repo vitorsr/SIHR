@@ -4,17 +4,17 @@ thR = 0.1; thG = 0.1;
 nY = size(src.rgb,1);
 nX = size(src.rgb,2);
 while true
-    cr = zChroma_r(src.rgb(1:nY-1,1:nX-1,:));
-    cg = zChroma_g(src.rgb(1:nY-1,1:nX-1,:));
-    cr_next_x = zChroma_r(src.rgb(1:nY-1,2:nX,:));
-    cg_next_x = zChroma_g(src.rgb(1:nY-1,2:nX,:));
-    cr_next_y = zChroma_r(src.rgb(2:nY,1:nX-1,:));
-    cg_next_y = zChroma_g(src.rgb(2:nY,1:nX-1,:));
+    cr = z.Chroma_r(src.rgb(1:nY-1,1:nX-1,:));
+    cg = z.Chroma_g(src.rgb(1:nY-1,1:nX-1,:));
+    cr_next_x = z.Chroma_r(src.rgb(1:nY-1,2:nX,:));
+    cg_next_x = z.Chroma_g(src.rgb(1:nY-1,2:nX,:));
+    cr_next_y = z.Chroma_r(src.rgb(2:nY,1:nX-1,:));
+    cg_next_y = z.Chroma_g(src.rgb(2:nY,1:nX-1,:));
     drx = cr_next_x - cr;
     dgx = cg_next_x - cg;
     dry = cr_next_y - cr;
     dgy = cg_next_y - cg;
-    iMaxChroma = zMaxChroma(src.rgb);
+    iMaxChroma = z.MaxChroma(src.rgb);
     for iY = 1:nY-1
         for iX = 1:nX-1
             if src.i(iY,iX) == z.CAMERA_DARK
