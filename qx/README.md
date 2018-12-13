@@ -8,10 +8,10 @@ bfilter2 was taken from [2] and was made by [Mahmoud Afifi](https://www.mathwork
 
 Whenever possible I'll implement the method Yang himself used, described in [3].
 
-## Reference
+## References
 
-1. Qingxiong Yang, Shengnan Wang, and Narendra Ahuja. 2010. Real-time specular highlight removal using bilateral filtering. In Proceedings of the 11th European conference on Computer vision: Part IV (ECCV'10), Kostas Daniilidis, Petros Maragos, and Nikos Paragios (Eds.). Springer-Verlag, Berlin, Heidelberg, 87-100;
+1. Q. Yang, S. Wang, and N. Ahuja, “Real-Time Specular Highlight Removal Using Bilateral Filtering,” in Computer Vision – ECCV 2010, Springer Berlin Heidelberg, 2010, pp. 87–100 [Online]. Available: http://dx.doi.org/10.1007/978-3-642-15561-1_7;
 
-2. Joint Bilateral filter. Link: https://www.mathworks.com/matlabcentral/fileexchange/62455-joint-bilateral-filter;
+2. Joint bilateral filter. Link: https://www.mathworks.com/matlabcentral/fileexchange/62455-joint-bilateral-filter;
 
-3. S. Paris and F. Durand, “A Fast Approximation of the Bilateral Filter Using a Signal Processing Approach,” International Journal of Computer Vision, vol. 81, no. 1, pp. 24–52, Dec. 2007 [Online]. Available: http://dx.doi.org/10.1007/s11263-007-0110-8.
+3. Q. Yang, K.-H. Tan, and N. Ahuja, “Real-time O(1) bilateral filtering,” in 2009 IEEE Conference on Computer Vision and Pattern Recognition, 2009 [Online]. Available: http://dx.doi.org/10.1109/CVPR.2009.5206542.
