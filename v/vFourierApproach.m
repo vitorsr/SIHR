@@ -79,7 +79,7 @@ clear idx idx3 sIdx sIdx3 sigmaMin3 tIdx tIdx3 total3
 %         break
 %     end
 % end
-ShowDifference(dst/255,src/255)
+Show.Difference(dst/255,src/255)
 set(gcf,'Visible','on')
 %%
 % [lA,lH,lV,lD] = haart2(lambdaMax,level);

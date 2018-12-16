@@ -2,7 +2,7 @@
 %%
 imInt = imread('img\toys.ppm');
 imDbl = im2double(imInt);
-%% Naïve T-space median filtering
+%% Naï¿½ve T-space median filtering
 %%
 clearvars -except imDbl
 imT = TSpace(imDbl,'fwd');
@@ -10,11 +10,11 @@ sz = 7;
 imT(:,:,2) = medfilt2(imT(:,:,2),[sz sz],'symmetric');
 imT(:,:,3) = medfilt2(imT(:,:,3),[sz sz],'symmetric');
 imNew = TSpace(imT,'rev');
-ShowDifference(imNew,imDbl)
+Show.Difference(imNew,imDbl)
 %% ROI-based segmentation and modified Shafer space
 %%
 clearvars -except imDbl
-mask = GrowHighlightMask(imDbl);
+mask = Mask.GrowHighlights(imDbl);
 mask = boolean(max(mask,[],3));
 stats = regionprops('table',mask,'Centroid','MajorAxisLength');
 diameters = stats.MajorAxisLength;
@@ -40,8 +40,8 @@ for iCtd = 1:nCtds
 end
 imNew = imProc(1+pad:size(imProc,1)-pad,1+pad:size(imProc,2)-pad,:);
 imNew = min(imNew,imDbl);
-ShowDifference(imNew,imDbl)
-DrawHist(imNew,imDbl,[0.7 1])
+Show.Difference(imNew,imDbl)
+Show.HistPair(imNew,imDbl,[0.7 1])
 %% Compact ROI complete image transformation
 %%
 clearvars -except imDbl
@@ -77,9 +77,9 @@ for iRe = 1:nRe
 end
 dr = 157:157+74;
 dc = 98:98+88;
-ShowDifference(imNew(dr,dc,:),imDbl(dr,dc,:))
-ShowDifference(imNew,imDbl)
-DrawHist(imNew,imDbl,[0.7 1])
+Show.Difference(imNew(dr,dc,:),imDbl(dr,dc,:))
+Show.Difference(imNew,imDbl)
+Show.HistPair(imNew,imDbl,[0.7 1])
 %% Methods based on frequency content
 %%
 imInt = imread('img\toys.ppm');
@@ -87,7 +87,7 @@ imDbl = im2double(imInt);
 %% Subtration of magnitude Fourier coefficients from highlight mask
 %%
 clearvars -except imDbl
-[~,mask] = GetScaledMask(imDbl);
+[~,mask] = Mask.Scaled(imDbl);
 %%
 Mask = fft2(mask);
 MaskAbs = abs(Mask);
@@ -96,8 +96,8 @@ ImDbl = fft2(imDbl);
 ImAng = angle(ImDbl);
 ImAbs = abs(ImDbl) - 1*MaskAbs;
 imNew = real(ifft2(ImAbs.*exp(1i*ImAng)));
-ShowDifference(imNew,imDbl)
-DrawHist(imNew,imDbl,[0.7 1])
+Show.Difference(imNew,imDbl)
+Show.HistPair(imNew,imDbl,[0.7 1])
 %% Attenuation of coefficients based on high-energy highlight mask
 %%
 Mask = fft2(mask);
@@ -108,15 +108,15 @@ ImAng = angle(ImDbl);
 ImAbs = abs(ImDbl);
 ImAbs(idx) = 0.9*ImAbs(idx); % mix: 0.94
 imNew = real(ifft2(ImAbs.*exp(1i*ImAng)));
-ShowDifference(imNew,imDbl)
-DrawHist(imNew,imDbl,[0.7 1])
+Show.Difference(imNew,imDbl)
+Show.HistPair(imNew,imDbl,[0.7 1])
 %% Wavelet
 %% Subtration of decomposition coefficients from highlight mask
 %%
 clearvars -except imDbl
 imNorm = imDbl-min(imDbl(:));
 imNorm = imNorm/max(imNorm(:));
-[~,mask] = GetScaledMask(imNorm);
+[~,mask] = Mask.Scaled(imNorm);
 mask = repmat(min(mask,[],3),[1 1 3]);
 %%
 wname = 'bior3.5';%'haar';
@@ -127,8 +127,8 @@ THR = wthrmngr('dw2ddenoLVL','sqtwolog',CH,SH,'mln');
 [~,CXC,~] = wdencmp('lvd',CH,SH,wname,level,THR,'s');
 C = C - 0.5*CXC; % mix: 0.16
 imNew = waverec2(C,S,wname);
-ShowDifference(imNew,imDbl)
-DrawHist(imNew,imDbl,[0.7 1])
+Show.Difference(imNew,imDbl)
+Show.HistPair(imNew,imDbl,[0.7 1])
 %% Attenuation of coefficients based on high-energy highlight mask
 %%
 [C,S] = wavedec2(imDbl,level,wname);
@@ -136,8 +136,8 @@ DrawHist(imNew,imDbl,[0.7 1])
 idx = find(abs(CH)>(mean(CH)+3*std(CH)));
 C(idx) = 0.9*C(idx); % mix: 0.9
 imNew = waverec2(C,S,wname);
-ShowDifference(imNew,imDbl)
-DrawHist(imNew,imDbl,[0.7 1])
+Show.Difference(imNew,imDbl)
+Show.HistPair(imNew,imDbl,[0.7 1])
 %% Methods based on interpolation
 %% Using highlight mask as criteria
 %%

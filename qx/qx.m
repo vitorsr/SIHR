@@ -8,7 +8,7 @@ classdef qx
     methods(Static)
         function [src,dst] = main(fname)
             src = im2double(imread(fname));
-            [src,dst] = qxHighlightRemoval(src);
+            [src,dst] = qx_highlight_removal_bf(src);
         end
     end
 end

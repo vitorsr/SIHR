@@ -9,8 +9,8 @@ imNew = imDbl;
 nRe = 50;
 %%
 for iRe = 1:nRe
-mask = GetNearClipMask(imNew);
-mask = GrowHighlightMask([],mask);
+mask = Mask.NearClip(imNew);
+mask = Mask.GrowHighlights([],mask);
 [maskR,maskG,maskB] = imsplit(mask);
 nR = InterpCh(nR,boolean(maskR));
 nG = InterpCh(nG,boolean(maskG));
@@ -20,9 +20,9 @@ end
 %%
 dr = 59:59+32-1;
 dc = 147:147+32-1;
-ShowDifference(imNew(dr,dc,:),imDbl(dr,dc,:))
+Show.Difference(imNew(dr,dc,:),imDbl(dr,dc,:))
 %%
-ShowDifference(imNew,imDbl)
+Show.Difference(imNew,imDbl)
 %%
 % tmp = mask.';
 % area(mask(:),'FaceAlpha',0.5,'FaceColor','r','EdgeColor','r')
@@ -66,7 +66,7 @@ end
 A = A(1+nPad:end-nPad,1+nPad:end-nPad);
 ref = ref(1+nPad:end-nPad,1+nPad:end-nPad);
 %%
-ShowDifference(repmat(A,[1 1 3]),repmat(ref,[1 1 3]))
+Show.Difference(repmat(A,[1 1 3]),repmat(ref,[1 1 3]))
 %%
 function new = InterpROI(roi,mask)
 % orig = floor((size(mask)+1)/2);

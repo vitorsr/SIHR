@@ -1,4 +1,4 @@
-imInt = imresize(imread('..\img\green.jpg'),[256 NaN],'lanczos3');
+imInt = imresize(imread('green.jpg'),[256 NaN],'lanczos3');
 imDbl = im2double(imInt);
 %%
 clearvars -except imDbl
@@ -30,13 +30,13 @@ imDbl = im2double(imInt);
 clearvars -except imDbl vsep
 %%
 imSc = SoftClip(imDbl,3.8); % 3.8
-ShowDifference(imSc,imDbl)
-DrawHist(imSc,imDbl,[0.5 1])
+Show.Difference(imSc,imDbl)
+Show.HistPair(imSc,imDbl,[0.5 1])
 legend({'Reference','Soft-clipped image'})
 %%
 imMin = min(imDbl,[],3);
-imDil = GrowHighlightMask(imDbl,imMin);
-ShowDifference(repmat(imDil,[1 1 3]),repmat(imMin,[1 1 3]))
+imDil = Mask.GrowHighlights(imDbl,imMin);
+Show.Difference(repmat(imDil,[1 1 3]),repmat(imMin,[1 1 3]))
 avg = mean(imDil,'all');
 sd = std(imDil,[],'all');
 thr = min(1,avg + 3*sd);
@@ -46,13 +46,13 @@ imshow(imDilThresh)
 %%
 [row,col] = ind2sub(size(imDilThresh),find(imDilThresh))
 %%
-[mScal,mDesat] = GetScaledMask(imDbl);
+[mScal,mDesat] = Mask.Scaled(imDbl);
 imshow([imDbl vsep mScal vsep mDesat])
 %%
 % % sfi = min(imDbl,[],3);
-imFSp = SpatialHighpass(imDbl);
-imFWv = WaveletHighpass(imDbl);
-imFMe =  MedianHighpass(imDbl);
+imFSp = Highpass.Spatial(imDbl);
+imFWv = Highpass.Wavelet(imDbl);
+imFMe =  Highpass.Median(imDbl);
 imshow(min([imFWv vsep imFMe vsep imFSp],[],3))
 title('(a) Wavelet HPF, (b) Median HPF, (c) Average HPF')
 M = max(imFWv,[],3);
@@ -74,9 +74,9 @@ for iCh = 1:nCh
     imFilt(:,:,iCh) = imProc(1+pad:end-pad,1+pad:end-pad);
 end
 %%
-ShowDifference(imFilt,imDbl)
+Show.Difference(imFilt,imDbl)
 imDblMin = min(min(1,max(0,imDbl-imFilt)),[],3);
-ShowDifference(imDbl-imDblMin,imDbl)
+Show.Difference(imDbl-imDblMin,imDbl)
 %%
 % iRow = [1+pad,nRows-pad]
 % iCol = [1+pad,nCols-pad]

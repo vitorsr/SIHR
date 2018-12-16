@@ -12,7 +12,7 @@ end
 imDbl = src{5};
 vsep = repmat(ones([size(imDbl,1) 1]),[1 1 3]);
 %%
-nc = GetNearClipMask(imDbl);
+nc = Mask.NearClip(imDbl);
 nc = logical(max(nc,[],3));
 stats = regionprops('table',nc,'Centroid',...
     'MajorAxisLength');
@@ -30,7 +30,7 @@ hold off
 clearvars -except fname src nFiles
 radii = [];
 for iFile = 1:nFiles
-    nc{iFile} = GetNearClipMask(src{iFile});
+    nc{iFile} = Mask.NearClip(src{iFile});
     nc{iFile} = logical(max(nc{iFile},[],3));
     stats{iFile} = regionprops('table',nc{iFile},'Centroid',...
         'MajorAxisLength');
@@ -64,7 +64,7 @@ clearvars
 %%
 imDbl = im2double(imresize(imread('img\mix.jpg'),[NaN 256],'lanczos3'));
 [~,s] = imsplit(rgb2hsv(imDbl));
-nc = max(GetNearClipMask(imDbl),[],3);
+nc = max(Mask.NearClip(imDbl),[],3);
 m = CtdMin(imDbl);
 imshow([m,s,nc])
 title('(a) Minimum values between channels, (b) Saturation (c) Near-clip')
@@ -108,8 +108,8 @@ while true
     end
 end
 new = cfi;
-ShowDifference(new,src)
-DrawHist(new,src,[0.7 1])
+Show.Difference(new,src)
+Show.HistPair(new,src,[0.7 1])
 %%
 function [cfi,esc] = CtdIteration(src,cfi) % ,pcoord,pradii
 [coord,radii] = CtdFind(cfi);
@@ -151,7 +151,7 @@ end
 %
 %
 function [coord,radii] = CtdFind(cfi)
-nc = GetNearClipMask(cfi);
+nc = Mask.NearClip(cfi);
 nc = logical(max(nc,[],3));
 stats = regionprops('table',nc,'Centroid','MajorAxisLength');
 coord = round(stats.Centroid);

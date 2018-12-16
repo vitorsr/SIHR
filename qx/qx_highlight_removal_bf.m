@@ -1,4 +1,4 @@
-function [src,dst] = qxHighlightRemoval(src)
+function [src,dst] = qx_highlight_removal_bf(src)
 total = sum(src,3);
 total3 = repmat(total,[1 1 3]);
 %
