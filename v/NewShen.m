@@ -72,13 +72,27 @@ end
 % legend({'Y','dark Y','adj. dark Y'})
 % axis tight, grid minor
 % view([60 60])
-
+%%
+img = 3;
+V = im2double(imread(fname{img}));
+G = im2double(imread(   gt{img}));
+[nRow,nCol,~] = size(V);
+tic
+loV = imresize(V,[7 7],'Method','bilinear','AntiAliasing',true);
+Vavg = imresize(loV,[nRow,nCol],'Method','bilinear','AntiAliasing',false);
+pSpec = min(Saturate(V-min(Vavg,[],3)),[],3);
+pSfi = V-pSpec;
+toc
+Vmsf = getMsf(V);
+subplot(311), Show.Difference(pSfi,V-min(V,[],3),2), title('SF v. PSFI')
+subplot(312), Show.Difference(pSfi,Vmsf,2), title('MSF v. PSFI')
+subplot(313), Show.Difference(pSfi,G,2), title('GT v. PSFI')
 %% Approach 2: final (beats SOA except for fruits)
 % clearvars -except fname gt
-V = im2double(imread(fname{11}));
-% G = im2double(imread(   gt{1}));
+V = im2double(imread(fname{3}));
+% G = im2double(imread(   gt{3}));
 [nRow,nCol,~] = size(V);
-s1 = 2/3; s2 = 2/3; aa = false; hm = 'uniform'; % 'polynomial'
+s1 = 1; s2 = 2/3; aa = true; hm = 'polynomial'; % 'polynomial'
 loV = imresize(V,s1,...
     'Method','bilinear','AntiAliasing',aa);
 loLoV = imresize(loV,s2,...
@@ -106,7 +120,7 @@ while true
         'Method','bilinear','AntiAliasing',aa);
     loVmatch = ycbcr2rgb(cat(3,loYmatch,loVsfYcc(:,:,2),loVsfYcc(:,:,3)));
     loResidual = min(1,max(0,loVdiff-loVmatch));
-    if range(loResidual(:)) <= 1e-3 || count >= 8
+    if range(loResidual(:)) <= 1e-4 || count >= 8
         break
     else     
         loVdiff = loVdiff - loResidual;

@@ -1,4 +1,4 @@
-src = double(imresize(imread('img\fish.ppm'),[256 NaN],'lanczos3'));
+src = double(imresize(imread('img\lady.bmp'),[256 NaN],'lanczos3'));
 src = src + 0.5*rand(size(src));
 dst = src;
 [srcR,srcG,srcB] = imsplit(src);
@@ -27,8 +27,8 @@ lambdaMax = max(lambda,[],3);
 %
 clear idx idx3 sIdx sIdx3 sigmaMin3 tIdx tIdx3 total3
 
-% count = uint8(0);
-% while true
+ count = uint8(0);
+ while true
 %     count = count + 1;
 %     if count>=8
 %         break
@@ -75,12 +75,11 @@ clear idx idx3 sIdx sIdx3 sigmaMin3 tIdx tIdx3 total3
     dstB(~idx) = srcB(~idx)-sfi(~idx);
     %
     dst = cat(3,dstR,dstG,dstB);
-%     if nnz(abs(sigmaMax-sigmaMaxF)>0.03)==0
-%         break
-%     end
-% end
+     if nnz(abs(sigmaMax-sigmaMaxF)>0.03)==0
+         break
+     end
+ end
 Show.Difference(dst/255,src/255)
-set(gcf,'Visible','on')
 %%
 % [lA,lH,lV,lD] = haart2(lambdaMax,level);
 % [sA,sH,sV,sD] = haart2(sigmaMax,level);

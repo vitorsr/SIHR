@@ -1,5 +1,6 @@
 function SIHR
-% SIHR SIHR is a personal project for the development and implementation of
+% SIHR Session path setup
+%   SIHR is a personal project for the development and implementation of
 % highlight removal methods.
 %
 % So far I have "implemented" (ported) these methods to MATLAB:
@@ -9,14 +10,14 @@ function SIHR
 % Ongoing individual development is located in:
 %   [~] v\
 %
-% [1]: R. T. Tan and K. Ikeuchi, ï¿½Separating reflection components of textured
-% surfaces using a single image,ï¿½ IEEE Transactions on Pattern Analysis and
-% Machine Intelligence, vol. 27, no. 2, pp. 178ï¿½193, Feb. 2005 [Online].
+% [1]: R. T. Tan and K. Ikeuchi, “Separating reflection components of textured
+% surfaces using a single image,” IEEE Transactions on Pattern Analysis and
+% Machine Intelligence, vol. 27, no. 2, pp. 178–193, Feb. 2005 [Online].
 % Available: http://dx.doi.org/10.1109/TPAMI.2005.36;
 %
-% [2]: Q. Yang, S. Wang, and N. Ahuja, ï¿½Real-Time Specular Highlight Removal
-% Using Bilateral Filtering,ï¿½ in Computer Vision ï¿½ ECCV 2010, Springer Berlin
-% Heidelberg, 2010, pp. 87ï¿½100 [Online]. Available:
+% [2]: Q. Yang, S. Wang, and N. Ahuja, “Real-Time Specular Highlight Removal
+% Using Bilateral Filtering,” in Computer Vision – ECCV 2010, Springer Berlin
+% Heidelberg, 2010, pp. 87–100 [Online]. Available:
 % http://dx.doi.org/10.1007/978-3-642-15561-1_7.
 addpath(genpath(['.' filesep]))
 end

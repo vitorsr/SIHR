@@ -1,8 +1,8 @@
 %% Methods based on space transformation
 
 clearvars
-fname = {'img\blue.jpg','img\fish.ppm','img\green.jpg','img\head.ppm','img\mix.jpg',...
-    'img\plastic.jpg','img\red.jpg','img\toys.ppm'};
+fname = {'blue.jpg','fish.ppm','green.jpg','head.ppm','mix.jpg',...
+    'plastic.jpg','red.jpg','toys.ppm'};
 nFiles = length(fname);
 for iFile = 1:nFiles
     src{iFile} = im2double(imresize(imread(fname{iFile}),[256 NaN],'lanczos3'));
@@ -58,11 +58,10 @@ xline(mean(r2db)+2*std(r2db),'r-.','LineWidth',2);
 xline(mean(r2db)+3*std(r2db),'r-.','LineWidth',1);
 title('In natural logarithm scale')
 legend({'Radii (dB)','\mu','\mu+\sigma','\mu+2\sigma','\mu+3\sigma'},'EdgeColor','w')
-clf reset
 %%
 clearvars
 %%
-imDbl = im2double(imresize(imread('img\mix.jpg'),[NaN 256],'lanczos3'));
+imDbl = im2double(imresize(imread('mix.jpg'),[NaN 256],'lanczos3'));
 [~,s] = imsplit(rgb2hsv(imDbl));
 nc = max(Mask.NearClip(imDbl),[],3);
 m = CtdMin(imDbl);
@@ -94,7 +93,7 @@ tmp = sqrt(dmx.^2+dmy.^2).*sqrt(drgbx.^2+drgby.^2);
 imshow(tmp)
 %%
 clearvars
-src = im2double(imresize(imread('img\mix.jpg'),[NaN 256],'lanczos3'));
+src = im2double(imresize(imread('mix.jpg'),[NaN 256],'lanczos3'));
 cfi = src;
 pmax = min(245/255,max(cfi(:)));
 %             ^ 255/255 - cameraDark/255, cameraDark = 10

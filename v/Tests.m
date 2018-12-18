@@ -24,60 +24,6 @@ imshow([neu vsep gm vsep ill])
 title('[(a) Neutral, (b) Green-magenta, (c) Illuminant] planes')
 QualityMetrics(imR,imDbl)
 %%
-imInt = imread('img\toys.ppm');
-imDbl = im2double(imInt);
-%%
-clearvars -except imDbl vsep
-%%
-imSc = SoftClip(imDbl,3.8); % 3.8
-Show.Difference(imSc,imDbl)
-Show.HistPair(imSc,imDbl,[0.5 1])
-legend({'Reference','Soft-clipped image'})
-%%
-imMin = min(imDbl,[],3);
-imDil = Mask.GrowHighlights(imDbl,imMin);
-Show.Difference(repmat(imDil,[1 1 3]),repmat(imMin,[1 1 3]))
-avg = mean(imDil,'all');
-sd = std(imDil,[],'all');
-thr = min(1,avg + 3*sd);
-imDil(imDil<thr) = 0;
-imDilThresh = imbinarize(imDil);
-imshow(imDilThresh)
-%%
-[row,col] = ind2sub(size(imDilThresh),find(imDilThresh))
-%%
-[mScal,mDesat] = Mask.Scaled(imDbl);
-imshow([imDbl vsep mScal vsep mDesat])
-%%
-% % sfi = min(imDbl,[],3);
-imFSp = Highpass.Spatial(imDbl);
-imFWv = Highpass.Wavelet(imDbl);
-imFMe =  Highpass.Median(imDbl);
-imshow(min([imFWv vsep imFMe vsep imFSp],[],3))
-title('(a) Wavelet HPF, (b) Median HPF, (c) Average HPF')
-M = max(imFWv,[],3);
-imshow(M.*mDesat)
-%%
-clearvars -except imDbl
-%%
-imFilt = zeros(size(imDbl));
-nRows = size(imDbl,1);
-nCols = size(imDbl,2);
-nCh   = size(imDbl,3);
-sz = fix(min(nRows,nCols)/20)*2+1;
-pad = fix((sz+1)/2);
-%%
-fcn = @(x) NewKuwaharaFilter(x);
-for iCh = 1:nCh
-    imProc = padarray(imDbl(:,:,iCh),[pad pad],'symmetric');
-    imProc = nlfilter(imProc,[sz sz],fcn);
-    imFilt(:,:,iCh) = imProc(1+pad:end-pad,1+pad:end-pad);
-end
-%%
-Show.Difference(imFilt,imDbl)
-imDblMin = min(min(1,max(0,imDbl-imFilt)),[],3);
-Show.Difference(imDbl-imDblMin,imDbl)
-%%
 % iRow = [1+pad,nRows-pad]
 % iCol = [1+pad,nCols-pad]
 % r1 = iRow - orig(1) + 1
@@ -151,7 +97,7 @@ plot3(ww(1)+[0 vv(1)],ww(2)+[0 vv(2)],ww(3)+[0 vv(3)],'y',...
 hold off
 title('RGB space')
 legend({'(R,G,B) scatter','Plane fit','Decomposition vectors'},...
-   'Box','off')
+    'Box','off')
 xlabel('R'), ylabel('G'), zlabel('B')
 xlim([0 1]), ylim([0 1]), zlim([0 1])
 axis square
