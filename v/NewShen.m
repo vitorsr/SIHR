@@ -13,15 +13,15 @@ gt = {...
     'animals_gt.bmp','cups_gt.bmp','fruit_gt.bmp','masks_gt.bmp'...
     };
 %%
-% V1 = imresize(im2double(imread(fname{4})),[NaN 200]);
-% V2 = im2double(imread(fname{10}));
-% Vycc1 = rgb2ycbcr(V1);
-% Vycc2 = rgb2ycbcr(V2);
-% [y1,cb1,cr1] = imsplit(Vycc1);
-% [y2,cb2,cr2] = imsplit(Vycc2);
-% figure(1)
-% imshow([V1 repmat([y1 cb1 cr1],[1 1 3]);
-%     V2 repmat([y2 cb2 cr2],[1 1 3])])
+V1 = imresize(im2double(imread(fname{4})),[NaN 200]);
+V2 = im2double(imread(fname{10}));
+Vycc1 = rgb2ycbcr(V1);
+Vycc2 = rgb2ycbcr(V2);
+[y1,cb1,cr1] = imsplit(Vycc1);
+[y2,cb2,cr2] = imsplit(Vycc2);
+figure(1)
+imshow([V1 repmat([y1 cb1 cr1],[1 1 3]);
+    V2 repmat([y2 cb2 cr2],[1 1 3])])
 %% Approach 1: not final either
 num = [4 2 3 1];
 for idx = 1:4
@@ -72,27 +72,12 @@ end
 % legend({'Y','dark Y','adj. dark Y'})
 % axis tight, grid minor
 % view([60 60])
-%%
-img = 3;
-V = im2double(imread(fname{img}));
-G = im2double(imread(   gt{img}));
-[nRow,nCol,~] = size(V);
-tic
-loV = imresize(V,[7 7],'Method','bilinear','AntiAliasing',true);
-Vavg = imresize(loV,[nRow,nCol],'Method','bilinear','AntiAliasing',false);
-pSpec = min(Saturate(V-min(Vavg,[],3)),[],3);
-pSfi = V-pSpec;
-toc
-Vmsf = getMsf(V);
-subplot(311), Show.Difference(pSfi,V-min(V,[],3),2), title('SF v. PSFI')
-subplot(312), Show.Difference(pSfi,Vmsf,2), title('MSF v. PSFI')
-subplot(313), Show.Difference(pSfi,G,2), title('GT v. PSFI')
 %% Approach 2: final (beats SOA except for fruits)
 % clearvars -except fname gt
-V = im2double(imread(fname{3}));
-% G = im2double(imread(   gt{3}));
+V = im2double(imread(fname{11}));
+% G = im2double(imread(   gt{2}));
 [nRow,nCol,~] = size(V);
-s1 = 1; s2 = 2/3; aa = true; hm = 'polynomial'; % 'polynomial'
+s1 = 1; s2 = 1; aa = true; hm = 'uniform'; % 'polynomial'
 loV = imresize(V,s1,...
     'Method','bilinear','AntiAliasing',aa);
 loLoV = imresize(loV,s2,...
@@ -107,7 +92,7 @@ loLoSatMask = getSatMask(V,s1,s2); % add satMaskValid flag
 count = uint8(0);
 while true
     loVsfYcc = rgb2ycbcr(...
-        loVdiff-min(loVdiff,[],3));
+        getMsf(loVdiff));%loVdiff-min(loVdiff,[],3));
     loVsfY = loVsfYcc(:,:,1);
     loLoYmatch = imhistmatch(...
         imresize(loVsfY,s2,...
@@ -120,7 +105,7 @@ while true
         'Method','bilinear','AntiAliasing',aa);
     loVmatch = ycbcr2rgb(cat(3,loYmatch,loVsfYcc(:,:,2),loVsfYcc(:,:,3)));
     loResidual = min(1,max(0,loVdiff-loVmatch));
-    if range(loResidual(:)) <= 1e-4 || count >= 8
+    if range(loResidual(:)) <= 1e-2 || count >= 8
         break
     else     
         loVdiff = loVdiff - loResidual;
@@ -166,8 +151,53 @@ dstMin = imresize(loRes,[nRow,nCol],'Method','bilinear');
 dst = src-min(1,max(0,min(src-dstMin,[],3)));
 % subplot(2,1,2),...
     Show.Difference(dst,gt,4)
+%%
+img = 4;
+V = im2double(imread(fname{img}));
+G = im2double(imread(   gt{img}));
+% [nRow,nCol,~] = size(V);
+% tic
+% loV = imresize(V,[7 7],'Method','bilinear','AntiAliasing',true);
+% Vavg = imresize(loV,[nRow,nCol],'Method','bilinear','AntiAliasing',false);
+SSIMVAL = zeros([1 80]);
+for idx = 1:80
+Vavg = imgaussfilt(V,idx,'Padding','symmetric');
+pSpec = min(Saturate(V-min(Vavg,[],3)),[],3);
+pSfi = V-pSpec;
+SSIMVAL(idx) = ssim(pSfi,G);
+end
+subplot(211), plot(1:80,SSIMVAL), axis tight, grid minor
+subplot(212), plot(2:80,diff(SSIMVAL)), axis tight, grid minor
+% toc
+% Vmsf = getMsf(V);
+% subplot(311), Show.Difference(pSfi,V-min(V,[],3),2), title('SF v. PSFI')
+% subplot(312), Show.Difference(pSfi,Vmsf,2), title('MSF v. PSFI')
+% subplot(313), Show.Difference(pSfi,G,2), title('GT v. PSFI')
 
-
+%%
+V = im2double(imread(fname{11}));
+Vcorr = V;
+Vest = V;
+count = uint8(0);
+while true
+    Vmsf = getMsf(V);
+    cddts = getCandidates(V,Vmsf);
+    m = maskAndDilateCddts(cddts,10);
+    cddts = imbinarize(cddts);
+    A = V;
+    A(cddts) = 0;
+    h = fspecial('gaussian',2*ceil(2*5)+1,5);
+    est = imfilter(V.*(1-m),h)./imfilter(1-m,h);
+    valid = ~isnan(est);
+    Vcorr(valid) = V(valid).*(1-m(valid)) + est(valid).*m(valid);
+    Vest(valid) = V(valid)-Saturate(min(V(valid)-min(Vcorr(valid),[],3),[],3));
+    if nnz(isnan(est)) < 1 || count >= 4
+        break
+    end
+    count = count + 1;
+end
+figure, imshow(est)
+Show.Difference(Vest,V)
 %% Functions
 
 function Vmsf = getMsf(V)
@@ -187,7 +217,7 @@ function cddts = getCandidates(V,Vmsf)
 Vmin = min(V,[],3);
 th1 = mean2(Vmin(:));
 cddts = ones(size(V));
-cddts((V-Vmsf)<th1) = 1e-3;
+cddts((V-Vmsf)<th1) = 0;
 end
 
 function mask = maskAndDilateCddts(cddts,sz)
@@ -201,14 +231,13 @@ end
 
 %%
 function loLoSatMask = getSatMask(V,s1,s2)
-Vmax = max(V,[],3);
 Vmin = min(V,[],3);
 %
 num = Vmin;
 den = sum(V,3);
 den(den==0) = 1e-3;
 sat = min(1,max(0,1-3.*num./den));
-% sat = histeq(sat);
+sat(Vmin<=mean2(Vmin(:))) = 1;
 %
 satMask = imdilate(...
     (1-sat).^4,...

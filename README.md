@@ -22,6 +22,8 @@ The project is structured like so:
     SIHR\
          ↳ img\
                ↳ Test images;
+         ↳  kj\
+               ↳ Implementation of Yoon's 2006 method [4];
          ↳  qx\
                ↳ Implementation of Yang's qx_highlight_removal_bf method [7];
          ↳   v\

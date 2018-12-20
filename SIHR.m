@@ -6,9 +6,10 @@ function SIHR
 % So far I have "implemented" (ported) these methods to MATLAB:
 %   [1] z\
 %   [2] qx\
+%   [3] kj\
 %
 % Ongoing individual development is located in:
-%   [~] v\
+%       v\
 %
 % [1]: R. T. Tan and K. Ikeuchi, “Separating reflection components of textured
 % surfaces using a single image,” IEEE Transactions on Pattern Analysis and
@@ -17,8 +18,13 @@ function SIHR
 %
 % [2]: Q. Yang, S. Wang, and N. Ahuja, “Real-Time Specular Highlight Removal
 % Using Bilateral Filtering,” in Computer Vision – ECCV 2010, Springer Berlin
-% Heidelberg, 2010, pp. 87–100 [Online]. Available:
-% http://dx.doi.org/10.1007/978-3-642-15561-1_7.
+% Heidelberg, 2010, pp. 87–100 [Online].
+% Available: http://dx.doi.org/10.1007/978-3-642-15561-1_7;
+%
+% [3]: K. Yoon, Y. Choi, and I. S. Kweon, “Fast Separation of Reflection
+% Components using a Specularity-Invariant Image Representation,” in 2006
+% International Conference on Image Processing, 2006 [Online].
+% Available: http://dx.doi.org/10.1109/ICIP.2006.312650.
 addpath(genpath(['.' filesep]))
 end
 
