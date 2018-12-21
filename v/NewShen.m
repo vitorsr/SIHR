@@ -74,7 +74,7 @@ end
 % view([60 60])
 %% Approach 2: final (beats SOA except for fruits)
 % clearvars -except fname gt
-V = im2double(imread(fname{11}));
+V = im2double(imread(fname{3}));
 % G = im2double(imread(   gt{2}));
 [nRow,nCol,~] = size(V);
 s1 = 1; s2 = 1; aa = true; hm = 'uniform'; % 'polynomial'
@@ -122,53 +122,22 @@ figure(2)
 Show.Difference(Vsfi,V,4)
 % subplot(212),...
 % Show.Difference(Vsfi,G,4)
-
-%% Approach 4: DCP (??)
-src = im2double(imread('masks.bmp'));
-gt = im2double(imread('masks_gt.bmp'));
-[nRow,nCol,nCh] = size(src);
-loRes = imresize(src,2/3,'Method','bilinear'); %,'AntiAliasing',false
-dstF = zeros(size(loRes));
-SIGMAS = 5; SIGMAR = 0.1; SZ = 2*ceil(2*SIGMAS)+1;
-count = uint8(0);
-while true
-    loGuide = loRes-min(loRes,[],3);
-    loGuide = loGuide/max(loGuide(:));
-    for iCh = 1:nCh
-        dstF(:,:,iCh) = im2double(bfilter2(loRes(:,:,iCh),loGuide(:,:,iCh),...
-            SZ,SIGMAS,SIGMAR)); % imguidedfilter ?
-    end
-    loResMin = min(1,max(0,min(loRes-dstF,[],3)));
-    if range(loResMin(:)) <= 0.02 || count >= 4
-        break
-    end
-    loRes = loRes-loResMin;
-    count = count + 1;
-end
-% figure(2)
-% subplot(2,1,1), Show.Difference(dstF,loRes,4)
-dstMin = imresize(loRes,[nRow,nCol],'Method','bilinear');
-dst = src-min(1,max(0,min(src-dstMin,[],3)));
-% subplot(2,1,2),...
-    Show.Difference(dst,gt,4)
 %%
-img = 4;
+t = [];
+PSNR = zeros([80 4]);
+for img = 1:4
 V = im2double(imread(fname{img}));
 G = im2double(imread(   gt{img}));
-% [nRow,nCol,~] = size(V);
-% tic
-% loV = imresize(V,[7 7],'Method','bilinear','AntiAliasing',true);
-% Vavg = imresize(loV,[nRow,nCol],'Method','bilinear','AntiAliasing',false);
-SSIMVAL = zeros([1 80]);
 for idx = 1:80
-Vavg = imgaussfilt(V,idx,'Padding','symmetric');
-pSpec = min(Saturate(V-min(Vavg,[],3)),[],3);
-pSfi = V-pSpec;
-SSIMVAL(idx) = ssim(pSfi,G);
+    Vavg = imgaussfilt(V,idx,'Padding','symmetric');
+    pSpec = min(Saturate(V-min(Vavg,[],3)),[],3);
+    pSfi = V-pSpec;
+    PSNR(idx,img) = psnr(pSfi,G);
 end
-subplot(211), plot(1:80,SSIMVAL), axis tight, grid minor
-subplot(212), plot(2:80,diff(SSIMVAL)), axis tight, grid minor
-% toc
+end
+subplot(211), plot(1:80,PSNR), axis tight, grid minor,...
+    legend({'Animals','Crups','Fruit','Masks'},'Location','southeast')
+subplot(212), plot(2:80,diff(PSNR)), axis tight, grid minor
 % Vmsf = getMsf(V);
 % subplot(311), Show.Difference(pSfi,V-min(V,[],3),2), title('SF v. PSFI')
 % subplot(312), Show.Difference(pSfi,Vmsf,2), title('MSF v. PSFI')
@@ -198,6 +167,7 @@ while true
 end
 figure, imshow(est)
 Show.Difference(Vest,V)
+%%
 %% Functions
 
 function Vmsf = getMsf(V)
