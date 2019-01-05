@@ -1,22 +1,8 @@
-fname = {...
-    ...%   (1)        (2)         (3)          (4)
-    'animals.bmp','cups.bmp','fruit.bmp','masks.bmp',...
-    ...%  (5)        (6)        (7)        (8)        (9)         (10)
-    'circle.ppm','fish.ppm','head.ppm','pear.ppm','toys.ppm','synth.ppm',...
-    ...%(11)         (12)        (13)             (14)       (15)
-    'lady.bmp','rabbit.bmp','train.bmp','watermelon.bmp','wood.bmp'...
-    };
-
-gt = {...
-    ...%      (1)           (2)            (3)            (4)
-    'animals_gt.bmp','cups_gt.bmp','fruit_gt.bmp','masks_gt.bmp'...
-    };
-%% Yamamoto
-clearvars -except fname gt
-i_input = im2double(imread(fname{6}));
+%% Import image to workspace
+i_input = im2double(imread('toys.ppm'));
 [nRow,nCol,nCh] = size(i_input);
 %% i = i_d + i_s
-[~,i_d] = qx.main(fname{6});
+i_d = qx_highlight_removal_bf(i_input); % or another highlight removal method
 i_s = Saturate(i_input - i_d);
 %% Iteration constraints
 count = uint8(0);
@@ -42,7 +28,7 @@ aux = i_s;
 %% (cont.)
 w = 0.146;
 
-thr = mean2(E_difference) + 3*std(E_difference(:));
+thr = mean2(E_difference) + 2*std(E_difference(:));
 
 replaceThese = E_difference > thr;
 
@@ -83,5 +69,4 @@ i_d = Saturate(i_input - i_s);
 end % ENDWHILE
 %%
 Show.Difference(i_input-aux,i_input-i_s,10)
-
 
