@@ -13,9 +13,16 @@ gt = {...
     };
 %% Yamamoto
 clearvars -except fname gt
-i_input = im2double(imread(fname{9}));
-[~,i_d] = qx.main(fname{9});
+i_input = im2double(imread(fname{6}));
+[nRow,nCol,nCh] = size(i_input);
+%% i = i_d + i_s
+[~,i_d] = qx.main(fname{6});
 i_s = Saturate(i_input - i_d);
+%% Iteration constraints
+count = uint8(0);
+e = 0.2;
+%% While loop
+while true
 %% (cont.)
 k = 10;
 h = fspecial('average',3);
@@ -30,7 +37,7 @@ i_s_um     = Saturate(i_s     + k*Saturate(i_s     - i_s_bf ));
 i_combined_um = Saturate(i_d_um + i_s_um);
 %% (cont.)
 E_difference = sum((i_combined_um - i_input_um).^2,3);
-%% Test iteration {{TODO: make it iterate}}
+%% Test iteration {{TODO: make it... iterate}}
 aux = i_s;
 %% (cont.)
 w = 0.146;
@@ -38,8 +45,6 @@ w = 0.146;
 thr = mean2(E_difference) + 3*std(E_difference(:));
 
 replaceThese = E_difference > thr;
-
-[nRow,nCol,nCh] = size(i_input);
 
 [row,col] = ind2sub(size(replaceThese),find(replaceThese));
 
@@ -68,8 +73,14 @@ for ind = 1:nnz(replaceThese)
     aux(row(ind),col(ind),:) = paux(row(ind)-2+pRow,col(ind)-2+pRol,:);
 end
 %% (cont.)
-% e = 0.2;
-% count = uint8(0); % max 10
+if sqrt(immse(aux,paux)) < e || count >= 10
+   break
+end
+%% Update i_d, i_s
+i_s = aux;
+i_d = Saturate(i_input - i_s);
+%%
+end % ENDWHILE
 %%
 Show.Difference(i_input-aux,i_input-i_s,10)
 

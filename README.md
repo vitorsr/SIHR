@@ -12,24 +12,36 @@ Run `SIHR.m` for path setup.
 
 Run `help SIHR` for documentation.
 
-The environment this project is being developed is:
+The environment this repository is being developed is:
 
 - MATLAB R2018b;
 - [Image Processing Toolbox](https://www.mathworks.com/products/image.html).
 
-The project is structured like so:
+The repository is structured as follows:
 
     SIHR\
-         ↳ img\
-               ↳ Test images;
-         ↳  kj\
-               ↳ Implementation of Yoon's 2006 method [4];
-         ↳  qx\
-               ↳ Implementation of Yang's qx_highlight_removal_bf method [7];
-         ↳   v\
-               ↳ Personal folder;
-         ↳   z\
-               ↳ Implementation of Tan's zHighlightRemoval class [3].
+      ↳ img\
+          ↳ Test images;
+      ↳ Tan2005\
+          ↳ Implementation of Tan's zHighlightRemoval class [3].
+            Available at (C++):
+            http://tanrobby.github.io/code/highlight.zip;
+      ↳ Yoon2006\
+          ↳ Implementation of Yoon's 2006 method [4];
+      ↳ Shen2008\
+          ↳ Code for [5].
+            Also available at (MATLAB):
+            http://ivlab.org/publications/PR2008_code.zip;
+      ↳ Yang2010\
+          ↳ Implementation of Yang's qx_highlight_removal_bf method [7].
+            Formerly available at (C++):
+            http://www.cs.cityu.edu.hk/~qiyang/publications/code/eccv-10.zip;
+      ↳ Akashi2015\
+          ↳ Direct implementation of [13];
+      ↳ Yamamoto2017\
+          ↳ Implementation of improvements in [14];
+      ↳ Ramos2019\
+          ↳ Personal folder.
 
 Feel free to create either an issue or a PR or contact me for any questions, comments, or improvements.
 
@@ -51,12 +63,18 @@ Below are listed major references and recognized works that I plan on studying.
 
 7. Q. Yang, S. Wang, and N. Ahuja, “Real-Time Specular Highlight Removal Using Bilateral Filtering,” in Computer Vision – ECCV 2010, Springer Berlin Heidelberg, 2010, pp. 87–100 [Online]. Available: http://dx.doi.org/10.1007/978-3-642-15561-1_7;
 
-8. H. Kim, H. Jin, S. Hadap, and I. Kweon, “Specular Reflection Separation Using Dark Channel Prior,” in 2013 IEEE Conference on Computer Vision and Pattern Recognition, 2013 [Online]. Available: http://dx.doi.org/10.1109/CVPR.2013.192;
+8. J. Yang, Z. Cai, L. Wen, Z. Lei, G. Guo, and S. Z. Li, “A New Projection Space for Separation of Specular-Diffuse Reflection Components in Color Images,” in Computer Vision – ACCV 2012, Springer Berlin Heidelberg, 2013, pp. 418–429 [Online]. Available: http://dx.doi.org/10.1007/978-3-642-37447-0_32;
 
-9. H.-L. Shen and Z.-H. Zheng, “Real-time highlight removal using intensity ratio,” Applied Optics, vol. 52, no. 19, p. 4483, Jun. 2013 [Online]. Available: http://dx.doi.org/10.1364/AO.52.004483;
+9. H. Kim, H. Jin, S. Hadap, and I. Kweon, “Specular Reflection Separation Using Dark Channel Prior,” in 2013 IEEE Conference on Computer Vision and Pattern Recognition, 2013 [Online]. Available: http://dx.doi.org/10.1109/CVPR.2013.192;
 
 10. J. Yang, L. Liu, and S. Z. Li, “Separating Specular and Diffuse Reflection Components in the HSI Color Space,” in 2013 IEEE International Conference on Computer Vision Workshops, 2013 [Online]. Available: http://dx.doi.org/10.1109/ICCVW.2013.122;
 
-11. J. Yang, Z. Cai, L. Wen, Z. Lei, G. Guo, and S. Z. Li, “A New Projection Space for Separation of Specular-Diffuse Reflection Components in Color Images,” in Computer Vision – ACCV 2012, Springer Berlin Heidelberg, 2013, pp. 418–429 [Online]. Available: http://dx.doi.org/10.1007/978-3-642-37447-0_32;
+11. H.-L. Shen and Z.-H. Zheng, “Real-time highlight removal using intensity ratio,” Applied Optics, vol. 52, no. 19, p. 4483, Jun. 2013 [Online]. Available: http://dx.doi.org/10.1364/AO.52.004483;
 
-12. Q. Yang, J. Tang, and N. Ahuja, “Efficient and Robust Specular Highlight Removal,” IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 37, no. 6, pp. 1304–1311, Jun. 2015 [Online]. Available: http://dx.doi.org/10.1109/TPAMI.2014.2360402.
+12. Q. Yang, J. Tang, and N. Ahuja, “Efficient and Robust Specular Highlight Removal,” IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 37, no. 6, pp. 1304–1311, Jun. 2015 [Online]. Available: http://dx.doi.org/10.1109/TPAMI.2014.2360402;
+
+13. Y. Akashi and T. Okatani, “Separation of reflection components by sparse non-negative matrix factorization,” Computer Vision and Image Understanding, vol. 146, pp. 77–85, May 2016 [Online]. Available: http://dx.doi.org/10.1016/j.cviu.2015.09.001;
+
+14. T. Yamamoto, T. Kitajima, and R. Kawauchi, “Efficient improvement method for separation of reflection components based on an energy function,” in 2017 IEEE International Conference on Image Processing (ICIP), 2017 [Online]. Available: http://dx.doi.org/10.1109/ICIP.2017.8297078;
+
+15. J. Guo, Z. Zhou, and L. Wang, “Single Image Highlight Removal with a Sparse and Low-Rank Reflection Model,” in Computer Vision – ECCV 2018, Springer International Publishing, 2018, pp. 282–298 [Online]. Available: http://dx.doi.org/10.1007/978-3-030-01225-0_17.
