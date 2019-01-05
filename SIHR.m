@@ -1,7 +1,7 @@
 function SIHR
 %SIHR Session path setup
-%   SIHR is a personal repository for the development and implementation of
-% highlight removal methods.
+%   SIHR is a repository for the development and implementation of single image
+%   highlight removal methods.
 %
 % So far I have implemented (or ported) these methods to MATLAB:
 %   [1] Tan2005\
