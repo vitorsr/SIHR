@@ -33,9 +33,11 @@ for idx = 1:4
     counter = uint8(0);
     while true
         [nRow,nCol,~] = size(V);
-        Vmsf = getMsf(V);
+        Vmin = min(V,[],3);
+        Vsf = V - Saturate(Vmin-mean2(Vmin(:)));
+        Vmsf = V - Vmin + mean2(Vmin(:));
         [Y,Cb,Cr] = imsplit(rgb2ycbcr(V)); % reshape(,[numel(V)/3 1 3])
-        [dY,dCb,dCr] = imsplit(rgb2ycbcr(Vmsf)); % reshape(,[numel(V)/3 1 3])
+        [dY,dCb,dCr] = imsplit(rgb2ycbcr(Vsf)); % reshape(,[numel(V)/3 1 3])
         % [sCb,iCb] = sort(Cb);
         % [sCr,iCr] = sort(Cr);
         diffCddts = ~imbinarize(max(getCandidates(V,Vmsf),[],3));
@@ -52,7 +54,7 @@ for idx = 1:4
         
         Vnew = ycbcr2rgb(cat(3,dYadj,dCb,dCr));
         Vresidual = min(Saturate(V-Vnew),[],3);
-        if range(Vresidual(:)) <= 0.03
+        if range(Vresidual(:)) <= 0.03 || counter >= 4
             break
         end
         V = V - Vresidual;
@@ -74,54 +76,41 @@ end
 % view([60 60])
 %% Approach 2: final (beats SOA except for fruits)
 % clearvars -except fname gt
-V = im2double(imread(fname{3}));
-% G = im2double(imread(   gt{2}));
+V = im2double(imread(fname{1}));
+G = im2double(imread(   gt{1}));
 [nRow,nCol,~] = size(V);
-s1 = 1; s2 = 1; aa = true; hm = 'uniform'; % 'polynomial'
-loV = imresize(V,s1,...
-    'Method','bilinear','AntiAliasing',aa);
-loLoV = imresize(loV,s2,...
-    'Method','bilinear','AntiAliasing',aa);
-loVdiff = loV;
-loVYcc = rgb2ycbcr(loV);
-loVY = loVYcc(:,:,1);
-loLoVY = imresize(loVY,s2,...
-    'Method','bilinear','AntiAliasing',aa);
-loLoSatMask = getSatMask(V,s1,s2); % add satMaskValid flag
+Vsfi = V;
+VYcc = rgb2ycbcr(V);
+VY = VYcc(:,:,1);
+% VsatMask = getSatMask(V,1,1); % add VsatMaskValid flag
 % figure(1), imshow(loLoSatMask)
 count = uint8(0);
 while true
-    loVsfYcc = rgb2ycbcr(...
-        getMsf(loVdiff));%loVdiff-min(loVdiff,[],3));
-    loVsfY = loVsfYcc(:,:,1);
-    loLoYmatch = imhistmatch(...
-        imresize(loVsfY,s2,...
-        'Method','bilinear','AntiAliasing',aa),...
-        loLoVY,...
-        'Method',hm);
-    loLoYmatch = loLoSatMask.*loLoVY + (1-loLoSatMask).*loLoYmatch;
-    loYmatch = imresize(loLoYmatch,...
-        [size(loV,1) size(loV,2)],...
-        'Method','bilinear','AntiAliasing',aa);
-    loVmatch = ycbcr2rgb(cat(3,loYmatch,loVsfYcc(:,:,2),loVsfYcc(:,:,3)));
-    loResidual = min(1,max(0,loVdiff-loVmatch));
-    if range(loResidual(:)) <= 1e-2 || count >= 8
+    VsfiMin = min(Vsfi,[],3);
+    VsfYcc = rgb2ycbcr(...
+        Vsfi - VsfiMin);
+        %getMsf(loVdiff));%loVdiff-min(loVdiff,[],3));
+        %loVdiff-Saturate(loVdiffMin-mean2(loVdiffMin(:)))+mean2(Vmin(:)));
+    VsfY = VsfYcc(:,:,1);
+    Ymatch = imhistmatch(VsfY,VY,'Method','uniform');
+    % Ymatch = VsatMask.*VY + (1-VsatMask).*Ymatch;
+    Vmatch = ycbcr2rgb(cat(3,Ymatch,VYcc(:,:,2),VYcc(:,:,3)));
+    residual = min(1,max(0,Vsfi-Vmatch));
+    Vsfi = Vsfi - residual;
+    if range(residual(:)) <= 1e-2 || count >= 8
         break
-    else     
-        loVdiff = loVdiff - loResidual;
+    else
         count = count + 1;
     end
 end
-Vdiff = imresize(loVdiff,[nRow nCol],...
-    'Method','bilinear','AntiAliasing',aa);
-spec = min(1,max(0,min(V - Vdiff,[],3)));
-Vsfi = V - spec;
+spec = min(1,max(0,min(V - Vsfi,[],3)));
+Vdiff = V - spec;
 
 figure(2)
 % subplot(211),...
-Show.Difference(Vsfi,V,4)
+% Show.Difference(Vsfi,V,4)
 % subplot(212),...
-% Show.Difference(Vsfi,G,4)
+Show.Difference(Vdiff,G,4)
 %%
 t = [];
 PSNR = zeros([80 4]);
@@ -168,6 +157,23 @@ end
 figure, imshow(est)
 Show.Difference(Vest,V)
 %%
+V = im2double(imread(fname{2}));
+G = im2double(imread(   gt{2}));
+Vin255  =  255*V;
+% filter parameters
+sigmaS = 32;
+sigmaR = 64;
+% call bilateral filter
+Vout255 = zeros(size(Vin255));
+for c = 1:3
+     Vout255(:,:,c) = shiftableBF(Vin255(:,:,c),sigmaS,sigmaR);
+end
+pSpec = min(Saturate(V-min(Vout255/255,[],3)),[],3);
+pSfi = V-pSpec;
+% figure(1), imshow(pSfi)
+figure(2), imshow(pSpec)
+figure(3), imshow(Vout255/255)
+figure(4), Show.Difference(pSfi,G,4)
 %% Functions
 
 function Vmsf = getMsf(V)
