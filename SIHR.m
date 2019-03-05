@@ -7,9 +7,10 @@ function SIHR
 %   [1] Tan2005\
 %   [2] Yoon2006\
 %   [3] Shen2008\
-%   [4] Yang2010\
-%   [5] Akashi2015\
-%   [6] Yamamoto2017\
+%   [4] Shen2009\
+%   [5] Yang2010\
+%   [6] Akashi2015\
+%   [7] Yamamoto2017\
 %
 % Ongoing development (personal folder) is located in:
 %   [ ] Ramos2019\
@@ -29,20 +30,23 @@ function SIHR
 % vol. 41, no. 8, pp. 2461–2469, Aug. 2008 [Online].
 % Available: http://dx.doi.org/10.1016/J.PATCOG.2008.01.026;
 %
-% [4] Q. Yang, S. Wang, and N. Ahuja, “Real-Time Specular Highlight Removal
+% [4] H.-L. Shen and Q.-Y. Cai, “Simple and efficient method for specularity
+% removal in an image,” Applied Optics, vol. 48, no. 14, p. 2711, May 2009 [Online].
+% Available: http://dx.doi.org/10.1364/AO.48.002711;
+%
+% [5] Q. Yang, S. Wang, and N. Ahuja, “Real-Time Specular Highlight Removal
 % Using Bilateral Filtering,” in Computer Vision – ECCV 2010, Springer Berlin
 % Heidelberg, 2010, pp. 87–100 [Online].
 % Available: http://dx.doi.org/10.1007/978-3-642-15561-1_7;
 %
-% [5] Y. Akashi and T. Okatani, “Separation of reflection components by sparse
+% [6] Y. Akashi and T. Okatani, “Separation of reflection components by sparse
 % non-negative matrix factorization,” Computer Vision and Image Understanding,
 % vol. 146, pp. 77–85, May 2016 [Online].
 % Available: http://dx.doi.org/10.1016/j.cviu.2015.09.001;
 %
-% [6] T. Yamamoto, T. Kitajima, and R. Kawauchi, “Efficient improvement method
+% [7] T. Yamamoto, T. Kitajima, and R. Kawauchi, “Efficient improvement method
 % for separation of reflection components based on an energy function,” in 2017
 % IEEE International Conference on Image Processing (ICIP), 2017 [Online].
 % Available: http://dx.doi.org/10.1109/ICIP.2017.8297078.
 addpath(genpath(['.' filesep]))
 end
-
