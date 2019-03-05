@@ -32,6 +32,8 @@ The repository is structured as follows:
           ↳ Code for [5].
             Also available at (MATLAB):
             http://ivlab.org/publications/PR2008_code.zip;
+      ↳ Shen2009\
+          ↳ Code for [6];
       ↳ Yang2010\
           ↳ Implementation of Yang's qx_highlight_removal_bf method [7].
             Formerly available at (C++):

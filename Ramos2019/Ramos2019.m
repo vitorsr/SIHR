@@ -7,14 +7,13 @@ fname = {...
     ...%(11)         (12)        (13)             (14)       (15)
     'lady.bmp','rabbit.bmp','train.bmp','watermelon.bmp','wood.bmp'...
     };
-
 gt = {...
     ...%      (1)           (2)            (3)            (4)
     'animals_gt.bmp','cups_gt.bmp','fruit_gt.bmp','masks_gt.bmp'...
     };
 %%
-V1 = imresize(im2double(imread(fname{4})),[NaN 200]);
-V2 = im2double(imread(fname{10}));
+V1 = im2double(imread(fname{10}));
+V2 = imresize(im2double(imread(fname{4})),[NaN 200]);
 Vycc1 = rgb2ycbcr(V1);
 Vycc2 = rgb2ycbcr(V2);
 [y1,cb1,cr1] = imsplit(Vycc1);
@@ -64,6 +63,7 @@ for idx = 1:4
     subplot(4,1,idx), Show.Difference(V,gnd),...
         title(['PSNR = ' num2str(psnr(V,gnd))])
 end
+%%
 % figure(2)
 % scatter3(Y(:),Cb(:),Cr(:),'r.')
 % hold on
@@ -75,42 +75,40 @@ end
 % axis tight, grid minor
 % view([60 60])
 %% Approach 2: final (beats SOA except for fruits)
-% clearvars -except fname gt
-V = im2double(imread(fname{1}));
-G = im2double(imread(   gt{1}));
-[nRow,nCol,~] = size(V);
-Vsfi = V;
-VYcc = rgb2ycbcr(V);
-VY = VYcc(:,:,1);
-% VsatMask = getSatMask(V,1,1); % add VsatMaskValid flag
-% figure(1), imshow(loLoSatMask)
-count = uint8(0);
-while true
-    VsfiMin = min(Vsfi,[],3);
-    VsfYcc = rgb2ycbcr(...
-        Vsfi - VsfiMin);
-        %getMsf(loVdiff));%loVdiff-min(loVdiff,[],3));
-        %loVdiff-Saturate(loVdiffMin-mean2(loVdiffMin(:)))+mean2(Vmin(:)));
-    VsfY = VsfYcc(:,:,1);
-    Ymatch = imhistmatch(VsfY,VY,'Method','uniform');
-    % Ymatch = VsatMask.*VY + (1-VsatMask).*Ymatch;
-    Vmatch = ycbcr2rgb(cat(3,Ymatch,VYcc(:,:,2),VYcc(:,:,3)));
-    residual = min(1,max(0,Vsfi-Vmatch));
-    Vsfi = Vsfi - residual;
-    if range(residual(:)) <= 1e-2 || count >= 8
-        break
-    else
-        count = count + 1;
-    end
-end
-spec = min(1,max(0,min(V - Vsfi,[],3)));
-Vdiff = V - spec;
-
-figure(2)
+clearvars -except fname gt
+% PSNR = zeros([255 4]);
+% for img = 1:4
+    V = im2double(imread(fname{img}));
+    G = im2double(imread(   gt{img}));
+%     for bin = 2:256
+        [nRow,nCol,~] = size(V);
+        Vsfi = V;
+        VYcc = rgb2ycbcr(V);
+        VY = VYcc(:,:,1);
+        % VsatMask = getSatMask(V,1,1); % add VsatMaskValid flag
+        % figure(1), imshow(VsatMask)
+        VsfiMin = min(Vsfi,[],3);
+        VsfYcc = rgb2ycbcr(...
+            Vsfi - VsfiMin);
+        VsfY = VsfYcc(:,:,1);
+        Ymatch = imhistmatch(VsfY,VY,bin,'Method','polynomial');
+        % Ymatch = VsatMask.*VY + (1-VsatMask).*Ymatch;
+        Vmatch = ycbcr2rgb(cat(3,Ymatch,VYcc(:,:,2),VYcc(:,:,3)));
+        residual = min(1,max(0,Vsfi-Vmatch));
+        Vsfi = Vsfi - residual;
+        spec = min(1,max(0,min(V - Vsfi,[],3)));
+        Vdiff = V - spec;
+%         PSNR(bin-1,img) = psnr(Vdiff,G);
+%     end
+% end
+% % % % % % plot
+% figure(2)
 % subplot(211),...
 % Show.Difference(Vsfi,V,4)
 % subplot(212),...
-Show.Difference(Vdiff,G,4)
+% Show.Difference(Vdiff,G,4)
+plot(2:256,PSNR), axis tight, grid minor,...
+    legend({'Animals','Crups','Fruit','Masks'},'Location','southeast')
 %%
 t = [];
 PSNR = zeros([80 4]);
@@ -174,8 +172,8 @@ pSfi = V-pSpec;
 figure(2), imshow(pSpec)
 figure(3), imshow(Vout255/255)
 figure(4), Show.Difference(pSfi,G,4)
-%% Functions
 
+%% Functions
 function Vmsf = getMsf(V)
 %% Generate MSF
 % Vmsf = getMsf(V);
@@ -222,6 +220,10 @@ satMask = imdilate(...
 loLoSatMask = imresize(...
     satMask,s1*s2,...
     'Method','bilinear','AntiAliasing',false);
+end
+
+function Vdith = normalDither(V)
+Vdith = Saturate(V+randn(size(V))/255);
 end
 
 % function vHp = FourierHighpass(v,s)
