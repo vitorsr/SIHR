@@ -3,7 +3,7 @@ i_input = im2double(imread('toys.ppm'));
 [nRow,nCol,nCh] = size(i_input);
 %% i = i_d + i_s
 i_d = qx_highlight_removal_bf(i_input); % or another highlight removal method
-i_s = Saturate(i_input - i_d);
+i_s = min(1,max(0,(i_input - i_d)));
 %% Iteration constraints
 count = uint8(0);
 e = 0.2;

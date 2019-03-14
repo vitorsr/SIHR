@@ -7,7 +7,7 @@ clear;
 
 threshold_chroma = 0.03;
 
-I = imread('bear.bmp');
+I = imread('cups.bmp');
 I = double(I);
 [height, width, dim] = size(I);
 
@@ -181,7 +181,7 @@ figure; imshow(uint8(reshape(Idf, height, width, 3))); title('diffuse component'
 figure; imshow(uint8(reshape(Isp, height, width, 3))); title('specular component');
 
 
-imwrite(uint8(reshape(Idf, height, width, 3)), 'comp_df.bmp', 'bmp');
-imwrite(uint8(reshape(Isp, height, width, 3)), 'comp_sp.bmp', 'bmp');
+% imwrite(uint8(reshape(Idf, height, width, 3)), 'comp_df.bmp', 'bmp');
+% imwrite(uint8(reshape(Isp, height, width, 3)), 'comp_sp.bmp', 'bmp');
 
 
