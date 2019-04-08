@@ -4,6 +4,7 @@ function SIHR
 %   highlight removal methods.
 %
 % So far I have implemented (or ported) these methods to MATLAB:
+%
 %   [1] Tan2005\
 %   [2] Yoon2006\
 %   [3] Shen2008\
@@ -12,9 +13,12 @@ function SIHR
 %   [6] Akashi2015\
 %   [7] Yamamoto2017\
 %
-% Ongoing development (personal folder) is located in:
-%   [ ] Ramos2019\
+% Note:
+% I did not have the time yet to modularize the scripts and e.g. turn them
+% into functions, feel free to do so, but as of right now you're better off
+% opening the scripts and running them yourself (i.e. `edit AuthorYEAR`).
 %
+% References:
 % [1] R. T. Tan and K. Ikeuchi, “Separating reflection components of textured
 % surfaces using a single image,” IEEE Transactions on Pattern Analysis and
 % Machine Intelligence, vol. 27, no. 2, pp. 178–193, Feb. 2005 [Online].
@@ -48,5 +52,7 @@ function SIHR
 % for separation of reflection components based on an energy function,” in 2017
 % IEEE International Conference on Image Processing (ICIP), 2017 [Online].
 % Available: http://dx.doi.org/10.1109/ICIP.2017.8297078.
+
 addpath(genpath(['.' filesep]))
+
 end
