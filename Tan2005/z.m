@@ -8,11 +8,8 @@ classdef z
         CAMERA_DARK = uint8(15)
     end
     methods(Static)
-        function [src,sfi,diff] = main(fname,sz)
-            if ~exist('sz','var') || isempty(sz)
-                sz = 1;
-            end
-            [src,sfi,diff] = zHighlightRemoval(fname,sz);
+        function [src,sfi,diff] = main(fname)
+            [src,sfi,diff] = zHighlightRemoval(fname);
             src = src/255;
             sfi = sfi/255;
             diff = diff/255;

@@ -1,6 +1,6 @@
 function [src,sfi] = zSpecularFreeImage(src)
 Lambda = 0.6;
-camDark = 10;
+camDark = 20;
 r = src.rgb(:,:,1); g = src.rgb(:,:,2); b = src.rgb(:,:,3);
 src.i(intersect(intersect(find(r<camDark),find(g<camDark)),...
     find(b<camDark))) = z.CAMERA_DARK;
