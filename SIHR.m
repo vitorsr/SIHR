@@ -12,6 +12,7 @@ function SIHR
 %   [5] Yang2010\
 %   [6] Akashi2015\
 %   [7] Yamamoto2017\
+%   [8] Guo2018\
 %
 % Note:
 % I did not have the time yet to modularize the scripts and e.g. turn them
@@ -51,7 +52,12 @@ function SIHR
 % [7] T. Yamamoto, T. Kitajima, and R. Kawauchi, “Efficient improvement method
 % for separation of reflection components based on an energy function,” in 2017
 % IEEE International Conference on Image Processing (ICIP), 2017 [Online].
-% Available: http://dx.doi.org/10.1109/ICIP.2017.8297078.
+% Available: http://dx.doi.org/10.1109/ICIP.2017.8297078;
+%
+% [8] J. Guo, Z. Zhou, and L. Wang, “Single Image Highlight Removal with a
+% Sparse and Low-Rank Reflection Model,” in Computer Vision – ECCV 2018,
+% Springer International Publishing, 2018, pp. 282–298 [Online].
+% Available: http://dx.doi.org/10.1007/978-3-030-01225-0_17.
 
 addpath(genpath(['.' filesep]))
 

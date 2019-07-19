@@ -42,6 +42,8 @@ The repository is structured as follows:
           ↳ Direct implementation of [11].
       ↳ Yamamoto2017\
           ↳ Implementation of improvements in [12].
+      ↳ Guo2018\
+          ↳ Beta implementation of [13].
 
 Feel free to create either an issue or a PR or contact me for any questions, comments, or improvements.
 
@@ -72,3 +74,5 @@ Below are listed references for works herein present and a couple survey papers 
 11. Y. Akashi and T. Okatani, “Separation of reflection components by sparse non-negative matrix factorization,” Computer Vision and Image Understanding, vol. 146, pp. 77–85, May 2016 [Online]. Available: http://dx.doi.org/10.1016/j.cviu.2015.09.001;
 
 12. T. Yamamoto, T. Kitajima, and R. Kawauchi, “Efficient improvement method for separation of reflection components based on an energy function,” in 2017 IEEE International Conference on Image Processing (ICIP), 2017 [Online]. Available: http://dx.doi.org/10.1109/ICIP.2017.8297078;
+
+13. J. Guo, Z. Zhou, and L. Wang, “Single Image Highlight Removal with a Sparse and Low-Rank Reflection Model,” in Computer Vision – ECCV 2018, Springer International Publishing, 2018, pp. 282–298 [Online]. Available: http://dx.doi.org/10.1007/978-3-030-01225-0_17.
