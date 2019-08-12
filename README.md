@@ -4,7 +4,27 @@ An ongoing effort of developing new and implementing established single image hi
 
 I welcome and encourage additions upon review.
 
-*Disclaimer: this repository is for educational purposes only.*
+*Disclaimer 1: this repository is for educational purposes only.*
+
+*Disclaimer 2: these methods are based on chromaticity analysis, they fail miserably for grayscale images.*
+
+## To do
+
+* `Shen2013` is pending code review.
+
+* `Akashi2015` needs code optimization and addition of trials in accordance to their paper. Warning: it'll be **very** slow to debug.
+
+* `Yamamoto2017` → `Yamamoto2019`. In addition, finish adding details in accordance to their improvements. See [Issue #4](https://github.com/vitorsr/SIHR/issues/4).
+
+* `Guo2018` is still **beta**. Pending code review. Add convergence criteria w.r.t. previous iteration.
+
+* Misc. tasks: refactor, format, assertions, etc.
+
+* Major task: rewrite code into an API-like format such that `Y = AuthorYEAR(X);`-type calls are possible.
+
+* Major task: profile code.
+
+* Major task: rewrite into matrix-vector notation (notably `Tan2005` and `Shen2013`).
 
 ## Usage
 
@@ -38,6 +58,10 @@ The repository is structured as follows:
           ↳ Implementation of Yang's qx_highlight_removal_bf method [7, 10].
             Formerly available at (C++):
             http://www.cs.cityu.edu.hk/~qiyang/publications/code/eccv-10.zip.
+      ↳ Shen2013\
+          ↳ "Translation" of [9].
+            Available at (C++):
+            http://www.ivlab.org/publications/AO2013_code.zip.
       ↳ Akashi2015\
           ↳ Direct implementation of [11].
       ↳ Yamamoto2017\
@@ -51,28 +75,30 @@ Below are listed references for works herein present and a couple survey papers 
 
 ## References
 
-1. A. Artusi, F. Banterle, and D. Chetverikov, “A Survey of Specularity Removal Methods,” Computer Graphics Forum, vol. 30, no. 8, pp. 2208–2230, Aug. 2011 [Online]. Available: http://dx.doi.org/10.1111/J.1467-8659.2011.01971.X;
+1. A. Artusi, F. Banterle, and D. Chetverikov, “A Survey of Specularity Removal Methods,” Computer Graphics Forum, vol. 30, no. 8, pp. 2208–2230, Aug. 2011 [Online]. Available: <http://dx.doi.org/10.1111/J.1467-8659.2011.01971.X>
 
-2. H. A. Khan, J.-B. Thomas, and J. Y. Hardeberg, “Analytical Survey of Highlight Detection in Color and Spectral Images,” in Lecture Notes in Computer Science, Springer International Publishing, 2017, pp. 197–208 [Online]. Available: http://dx.doi.org/10.1007/978-3-319-56010-6_17;
+2. H. A. Khan, J.-B. Thomas, and J. Y. Hardeberg, “Analytical Survey of Highlight Detection in Color and Spectral Images,” in Lecture Notes in Computer Science, Springer International Publishing, 2017, pp. 197–208 [Online]. Available: <http://dx.doi.org/10.1007/978-3-319-56010-6_17>
 
-3. R. T. Tan and K. Ikeuchi, “Separating reflection components of textured surfaces using a single image,” IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 27, no. 2, pp. 178–193, Feb. 2005 [Online]. Available: http://dx.doi.org/10.1109/TPAMI.2005.36;
+3. R. T. Tan and K. Ikeuchi, “Separating reflection components of textured surfaces using a single image,” IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 27, no. 2, pp. 178–193, Feb. 2005 [Online]. Available: <http://dx.doi.org/10.1109/TPAMI.2005.36>
 
-4. K. Yoon, Y. Choi, and I. S. Kweon, “Fast Separation of Reflection Components using a Specularity-Invariant Image Representation,” in 2006 International Conference on Image Processing, 2006 [Online]. Available: http://dx.doi.org/10.1109/ICIP.2006.312650;
+4. K. Yoon, Y. Choi, and I. S. Kweon, “Fast Separation of Reflection Components using a Specularity-Invariant Image Representation,” in 2006 International Conference on Image Processing, 2006 [Online]. Available: <http://dx.doi.org/10.1109/ICIP.2006.312650>
 
-5. H.-L. Shen, H.-G. Zhang, S.-J. Shao, and J. H. Xin, “Chromaticity-based separation of reflection components in a single image,” Pattern Recognition, vol. 41, no. 8, pp. 2461–2469, Aug. 2008 [Online]. Available: http://dx.doi.org/10.1016/J.PATCOG.2008.01.026;
+5. H.-L. Shen, H.-G. Zhang, S.-J. Shao, and J. H. Xin, “Chromaticity-based separation of reflection components in a single image,” Pattern Recognition, vol. 41, no. 8, pp. 2461–2469, Aug. 2008 [Online]. Available: <http://dx.doi.org/10.1016/J.PATCOG.2008.01.026>
 
-6. H.-L. Shen and Q.-Y. Cai, “Simple and efficient method for specularity removal in an image,” Applied Optics, vol. 48, no. 14, p. 2711, May 2009 [Online]. Available: http://dx.doi.org/10.1364/AO.48.002711;
+6. H.-L. Shen and Q.-Y. Cai, “Simple and efficient method for specularity removal in an image,” Applied Optics, vol. 48, no. 14, p. 2711, May 2009 [Online]. Available: <http://dx.doi.org/10.1364/AO.48.002711>
 
-7. R. Grosse, M. K. Johnson, E. H. Adelson, and W. T. Freeman, “Ground truth dataset and baseline evaluations for intrinsic image algorithms,” in 2009 IEEE 12th International Conference on Computer Vision, 2009 [Online]. Available: http://dx.doi.org/10.1109/ICCV.2009.5459428;
+7. R. Grosse, M. K. Johnson, E. H. Adelson, and W. T. Freeman, “Ground truth dataset and baseline evaluations for intrinsic image algorithms,” in 2009 IEEE 12th International Conference on Computer Vision, 2009 [Online]. Available: <http://dx.doi.org/10.1109/ICCV.2009.5459428>
 
-8. Q. Yang, S. Wang, and N. Ahuja, “Real-Time Specular Highlight Removal Using Bilateral Filtering,” in Computer Vision – ECCV 2010, Springer Berlin Heidelberg, 2010, pp. 87–100 [Online]. Available: http://dx.doi.org/10.1007/978-3-642-15561-1_7;
+8. Q. Yang, S. Wang, and N. Ahuja, “Real-Time Specular Highlight Removal Using Bilateral Filtering,” in Computer Vision – ECCV 2010, Springer Berlin Heidelberg, 2010, pp. 87–100 [Online]. Available: <http://dx.doi.org/10.1007/978-3-642-15561-1_7>
 
-9. H.-L. Shen and Z.-H. Zheng, “Real-time highlight removal using intensity ratio,” Applied Optics, vol. 52, no. 19, p. 4483, Jun. 2013 [Online]. Available: http://dx.doi.org/10.1364/AO.52.004483;
+9. H.-L. Shen and Z.-H. Zheng, “Real-time highlight removal using intensity ratio,” Applied Optics, vol. 52, no. 19, p. 4483, Jun. 2013 [Online]. Available: <http://dx.doi.org/10.1364/AO.52.004483>
 
-10. Q. Yang, J. Tang, and N. Ahuja, “Efficient and Robust Specular Highlight Removal,” IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 37, no. 6, pp. 1304–1311, Jun. 2015 [Online]. Available: http://dx.doi.org/10.1109/TPAMI.2014.2360402;
+10. Q. Yang, J. Tang, and N. Ahuja, “Efficient and Robust Specular Highlight Removal,” IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 37, no. 6, pp. 1304–1311, Jun. 2015 [Online]. Available: <http://dx.doi.org/10.1109/TPAMI.2014.2360402>
 
-11. Y. Akashi and T. Okatani, “Separation of reflection components by sparse non-negative matrix factorization,” Computer Vision and Image Understanding, vol. 146, pp. 77–85, May 2016 [Online]. Available: http://dx.doi.org/10.1016/j.cviu.2015.09.001;
+11. Y. Akashi and T. Okatani, “Separation of reflection components by sparse non-negative matrix factorization,” Computer Vision and Image Understanding, vol. 146, pp. 77–85, May 2016 [Online]. Available: <http://dx.doi.org/10.1016/j.cviu.2015.09.001>
 
-12. T. Yamamoto, T. Kitajima, and R. Kawauchi, “Efficient improvement method for separation of reflection components based on an energy function,” in 2017 IEEE International Conference on Image Processing (ICIP), 2017 [Online]. Available: http://dx.doi.org/10.1109/ICIP.2017.8297078;
+12. T. Yamamoto, T. Kitajima, and R. Kawauchi, “Efficient improvement method for separation of reflection components based on an energy function,” in 2017 IEEE International Conference on Image Processing (ICIP), 2017 [Online]. Available: <http://dx.doi.org/10.1109/ICIP.2017.8297078>
 
-13. J. Guo, Z. Zhou, and L. Wang, “Single Image Highlight Removal with a Sparse and Low-Rank Reflection Model,” in Computer Vision – ECCV 2018, Springer International Publishing, 2018, pp. 282–298 [Online]. Available: http://dx.doi.org/10.1007/978-3-030-01225-0_17.
+13. J. Guo, Z. Zhou, and L. Wang, “Single Image Highlight Removal with a Sparse and Low-Rank Reflection Model,” in Computer Vision – ECCV 2018, Springer International Publishing, 2018, pp. 282–298 [Online]. Available: <http://dx.doi.org/10.1007/978-3-030-01225-0_17>
+
+14. T. Yamamoto and A. Nakazawa, “General Improvement Method of Specular Component Separation Using High-Emphasis Filter and Similarity Function,” ITE Transactions on Media Technology and Applications, vol. 7, no. 2, pp. 92–102, 2019 [Online]. Available: <http://dx.doi.org/10.3169/mta.7.92>
