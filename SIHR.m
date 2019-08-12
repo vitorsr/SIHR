@@ -10,9 +10,10 @@ function SIHR
 %   [3] Shen2008\
 %   [4] Shen2009\
 %   [5] Yang2010\
-%   [6] Akashi2015\
-%   [7] Yamamoto2017\
-%   [8] Guo2018\
+%   [6] Shen2013\
+%   [7] Akashi2015\
+%   [8] Yamamoto2017\
+%   [9] Guo2018\
 %
 % Note:
 % I did not have the time yet to modularize the scripts and e.g. turn them
@@ -44,17 +45,21 @@ function SIHR
 % Heidelberg, 2010, pp. 87–100 [Online].
 % Available: http://dx.doi.org/10.1007/978-3-642-15561-1_7;
 %
-% [6] Y. Akashi and T. Okatani, “Separation of reflection components by sparse
+% [6] H.-L. Shen and Z.-H. Zheng, “Real-time highlight removal using intensity
+% ratio,” Applied Optics, vol. 52, no. 19, p. 4483, Jun. 2013 [Online].
+% Available: <http://dx.doi.org/10.1364/AO.52.004483>
+%
+% [7] Y. Akashi and T. Okatani, “Separation of reflection components by sparse
 % non-negative matrix factorization,” Computer Vision and Image Understanding,
 % vol. 146, pp. 77–85, May 2016 [Online].
 % Available: http://dx.doi.org/10.1016/j.cviu.2015.09.001;
 %
-% [7] T. Yamamoto, T. Kitajima, and R. Kawauchi, “Efficient improvement method
+% [8] T. Yamamoto, T. Kitajima, and R. Kawauchi, “Efficient improvement method
 % for separation of reflection components based on an energy function,” in 2017
 % IEEE International Conference on Image Processing (ICIP), 2017 [Online].
 % Available: http://dx.doi.org/10.1109/ICIP.2017.8297078;
 %
-% [8] J. Guo, Z. Zhou, and L. Wang, “Single Image Highlight Removal with a
+% [9] J. Guo, Z. Zhou, and L. Wang, “Single Image Highlight Removal with a
 % Sparse and Low-Rank Reflection Model,” in Computer Vision – ECCV 2018,
 % Springer International Publishing, 2018, pp. 282–298 [Online].
 % Available: http://dx.doi.org/10.1007/978-3-030-01225-0_17.
