@@ -1,14 +1,31 @@
+function I_d = Shen2008(I)
+%Shen2008 I_d = Shen2008(I)
+%  This method is provided as a script by the author. It was modified in
+%  order to conform to the toolbox.
+%  
+%  See also SIHR, Shen2009, Shen2013.
+
+assert(isa(I, 'float'), 'SIHR:I:notTypeSingleNorDouble', ...
+    'Input I is not type single nor double.')
+assert(min(I(:)) >= 0 && max(I(:)) <= 1, 'SIHR:I:notWithinRange', ...
+    'Input I is not within [0, 1] range.')
+[n_row, n_col, n_ch] = size(I);
+assert(n_row > 1 && n_col > 1, 'SIHR:I:singletonDimension', ...
+    'Input I has a singleton dimension.')
+assert(n_ch == 3, 'SIHR:I:notRGB', ...
+    'Input I is not a RGB image.')
+
 % Code for the following paper:
 % H. L. Shen, H. G. Zhang, S. J. Shao, and J. H. Xin, 
 % Chromaticity-based separation of reflection components in a single image, 
 % Pattern Recognition, 41(8), 2461-2469, 2008.
 
-clear;
+% clear;
 
 threshold_chroma = 0.03;
 
-I = imread('cups.bmp');
-I = double(I);
+% I = imread('cups.bmp');
+% I = double(I);
 [height, width, dim] = size(I);
 
 I3c = reshape(I, height*width, 3);
@@ -27,7 +44,7 @@ ind_cmb = find(Itemp(:,1) > th & Itemp(:,2) > th & Itemp(:,3) > th);
 Imask_cmb(ind_cmb,:) = 1; 
 
 Imask_df = zeros(height * width, 1);
-ind_df = find(Itemp(:,1) < th & Itemp(:,2) < th & Itemp(:,3) < th & Imax > 20);
+ind_df = find(Itemp(:,1) < th & Itemp(:,2) < th & Itemp(:,3) < th & Imax > 20/255);
 Imask_df(ind_df, :) = 1;
 
 
@@ -43,7 +60,7 @@ ind_all = find(Imask_cmb == 1 | Imask_df == 1);
 Imask_all(ind_all,:) = 1;
 Imask_processed(ind_all) = 0; % -1: not considered; 0: not processed; 1: processed
 
-vs = [255 255 255]; % light color, assumed white
+vs = [1 1 1]; % light color, assumed white
 
 Idf = I3c;
 Isp = zeros(size(I3c));
@@ -111,7 +128,7 @@ while(1)
 
            % display how many pixels are processed
             ind = find(Imask_processed == 1);
-            sprintf( '%d / %d\n', size(ind, 1), size(ind_all,1))
+            % sprintf( '%d / %d\n', size(ind, 1), size(ind_all,1))
             
         end
          
@@ -168,7 +185,7 @@ while(1)
                 
                 % display processed pixel number
                 ind = find(Imask_processed == 1);
-                sprintf( '%d / %d\n', size(ind, 1), size(ind_all,1))
+                % sprintf( '%d / %d\n', size(ind, 1), size(ind_all,1))
                 
             end
         end
@@ -176,12 +193,13 @@ while(1)
 end
     
 
-figure; imshow(uint8(reshape(I3c, height, width, 3))); title('original'); 
-figure; imshow(uint8(reshape(Idf, height, width, 3))); title('diffuse component');
-figure; imshow(uint8(reshape(Isp, height, width, 3))); title('specular component');
+% figure; imshow(uint8(reshape(I3c, height, width, dim))); title('original'); 
+% figure; imshow(uint8(reshape(Idf, height, width, dim))); title('diffuse component');
+% figure; imshow(uint8(reshape(Isp, height, width, dim))); title('specular component');
 
+I_d = reshape(Idf, height, width, dim);
 
-% imwrite(uint8(reshape(Idf, height, width, 3)), 'comp_df.bmp', 'bmp');
-% imwrite(uint8(reshape(Isp, height, width, 3)), 'comp_sp.bmp', 'bmp');
+% imwrite(uint8(reshape(Idf, height, width, dim)), 'comp_df.bmp', 'bmp');
+% imwrite(uint8(reshape(Isp, height, width, dim)), 'comp_sp.bmp', 'bmp');
 
-
+end

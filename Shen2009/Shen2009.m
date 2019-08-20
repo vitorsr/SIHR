@@ -1,23 +1,41 @@
+function I_d = Shen2009(I)
+%Shen2009 I_d = Shen2009(I)
+%  This implementation was at one point distributed by the author as a
+%  script. It was modified in order to conform with the toolbox and was
+%  incorporated for completion.
+%  
+%  See also SIHR, Shen2008, Shen2013.
+
+assert(isa(I, 'float'), 'SIHR:I:notTypeSingleNorDouble', ...
+    'Input I is not type single nor double.')
+assert(min(I(:)) >= 0 && max(I(:)) <= 1, 'SIHR:I:notWithinRange', ...
+    'Input I is not within [0, 1] range.')
+[n_row, n_col, n_ch] = size(I);
+assert(n_row > 1 && n_col > 1, 'SIHR:I:singletonDimension', ...
+    'Input I has a singleton dimension.')
+assert(n_ch == 3, 'SIHR:I:notRGB', ...
+    'Input I is not a RGB image.')
+
 % Code for the following paper:
 % H. L. Shen, H. G. Zhang, S. J. Shao, and J. H. Xin, 
 % Simple and Efficient Method for Specularity Removal in an Image, 
 
-clear; close all;
+% clear; close all;
 
-threshold_chroma = 0.03;
+% threshold_chroma = 0.03;
 nu = 0.5;
 
-I = imread('images\4k.bmp');
-I = double(I);
+% I = imread('images\4k.bmp');
+% I = double(I);
 [height, width, dim] = size(I);
 
 I3c = reshape(I, height*width, 3);
-tic;
+% tic;
 % calculate specular-free image
 Imin = min(I3c, [], 2);
-Imax = max(I3c, [], 2);
+% Imax = max(I3c, [], 2);
 Ithresh = mean(Imin) + nu * std(Imin);
-Iss = I3c - repmat(Imin, 1, 3) .* (Imin > Ithresh) + Ithresh * (Imin > Ithresh);
+% Iss = I3c - repmat(Imin, 1, 3) .* (Imin > Ithresh) + Ithresh * (Imin > Ithresh);
 
 % calculate specular component
 IBeta = (Imin - Ithresh) .* (Imin > Ithresh) + 0;
@@ -41,15 +59,15 @@ Betasur = mean(IBeta(ISurroundingRegion, :));
 k = (Vsur - Vdom)/(Betasur - Betadom);
 
 % Estimate diffuse and specular components
-Idf = I3c - min(k) * IBeta;
-Isp = I3c - Idf;
+I_d = reshape(I3c - min(k) * IBeta, height, width, dim);
 
-%figure; imshow(uint8(reshape(I3c, height, width, 3))); title('original'); 
-%figure; imshow(uint8(reshape(Idf, height, width, 3))); title('diffuse component');
-%figure; imshow(uint8(reshape(Isp, height, width, 3))); title('specular component');
+%figure; imshow(uint8(reshape(I3c, height, width, dim))); title('original'); 
+%figure; imshow(uint8(reshape(Idf, height, width, dim))); title('diffuse component');
+%figure; imshow(uint8(reshape(Isp, height, width, dim))); title('specular component');
 
 
-%imwrite(uint8(reshape(Idf, height, width, 3)), 'comp_df.bmp', 'bmp');
-%imwrite(uint8(reshape(Isp, height, width, 3)), 'comp_sp.bmp', 'bmp');
-toc;
+%imwrite(uint8(reshape(Idf, height, width, dim)), 'comp_df.bmp', 'bmp');
+%imwrite(uint8(reshape(Isp, height, width, dim)), 'comp_sp.bmp', 'bmp');
+% toc;
 
+end
