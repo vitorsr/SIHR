@@ -46,22 +46,21 @@ I_d = AuthorYEAR(I); % I is a double-valued input image of dimension
 
 The following methods are available.
 
-|Year| Method                  | Function     |
-|:--:|-------------------------|--------------|
-|2005| Tan and Ikeuchi [4]     | `Tan2005`    |
-|2006| Yoon *et al.* [5]       | `Yoon2006`   |
-|2008| Shen *et al.* [6]       | `Shen2008`   |
-|2009| Shen and Cai  [7]       | `Shen2009`   |
-|2010| Yang *et al.* [8]       | `Yang2010`   |
-|2013| Shen and Zheng [9]      | `Shen2013`   |
-|2016| Akashi and Okatani [10] | `Akashi2015` |
-|2018| Guo *et al.* [11]       | `Guo2018`    |
+|Year| Method                     | Function       |
+|:--:|----------------------------|----------------|
+|2005| Tan and Ikeuchi [4]        | `Tan2005`      |
+|2006| Yoon *et al.* [5]          | `Yoon2006`     |
+|2008| Shen *et al.* [6]          | `Shen2008`     |
+|2009| Shen and Cai  [7]          | `Shen2009`     |
+|2010| Yang *et al.* [8]          | `Yang2010`     |
+|2013| Shen and Zheng [9]         | `Shen2013`     |
+|2016| Akashi and Okatani [10]    | `Akashi2016`   |
 
 The following improvement is available.
 
-|Year| Method                 | Function       |
-|:--:|------------------------|----------------|
-|2017| Yamamoto *et al.* [12] | `Yamamoto2017` |
+|Year| Method                     | Function       |
+|:--:|----------------------------|----------------|
+|2019| Yamamoto and Nakazawa [11] | `Yamamoto2019` |
 
 ### Environment
 
@@ -69,29 +68,22 @@ The environment this repository is being developed is:
 
 * [MATLAB](https://www.mathworks.com/products/matlab.html)
     * [Image Processing Toolbox](https://www.mathworks.com/products/image.html)
-    * [Statistics and Machine Learning Toolbox](https://www.mathworks.com/products/statistics.html)<sup>6</sup>
 * [GNU Octave](https://www.gnu.org/software/octave/)
     * [Image package](https://octave.sourceforge.io/image/index.html)
         * `pkg install -forge image`
-    * [Statistics package](https://octave.sourceforge.io/statistics/index.html) (requires [Input/Output package](https://octave.sourceforge.io/io/index.html))<sup>6</sup>
-        * `pkg install -forge io`
-        * `pkg install -forge statistics`
-
-<sup>6</sup> Just for `kmeans`
 
 #### Tested environments
 
-TODO 19/08: tests are still ongoing.
-
-    [Y] Octave 5.1 (latest)    Windows 10 1903    Ubuntu 18.04
-    [ ] MATLAB 9.1 (R2016b)    Windows 10 1903
-    [Y] MATLAB 9.6 (R2019a)    Windows 10 1903    Ubuntu 16.04 (MATLAB Online)
+    Octave 4.2                                Ubuntu 18.04
+    Octave 5.1 (latest)    Windows 10 1903
+    MATLAB 9.1 (R2016b)    Windows 10 1903
+    MATLAB 9.6 (R2019a)    Windows 10 1903    Ubuntu 16.04 (MATLAB Online)
 
 ### Instalation
 
 1. [`git clone`](https://github.com/vitorsr/SIHR.git) or [download](https://github.com/vitorsr/SIHR/archive/master.zip) the repository.
 1. Start Octave or MATLAB.
-    1. `cd('path/to/SIHR')` i.e. change current folder to SIHR root (where `SIHR.m` is located).
+    1. `cd('path/to/SIHR')` i.e. change current folder to `SIHR` root (where `SIHR.m` is located).
     1. `run SIHR.m` for session path setup.
     1. `help SIHR` or `doc SIHR` provides a summary of the methods available.
 
@@ -99,9 +91,11 @@ TODO 19/08: tests are still ongoing.
 
 This section aims to clarify how well (or not) the methods reproduced in this project were at reproducing results in literature.
 
+Note: Akashi and Okatani's [10] method has highly fluctuating results because of random initialization.
+
 ### Dataset
 
-In technical literature, there exist two ground truth datasets commonly used right now. One by Shen and Zheng [9] which is informally distributed alongside their code<sup>5</sup>, and one by Grosse *et al.* [13] in a dedicated page<sup>7</sup>. To the best of my knowledge, both are distributed without a license (it is of my understanding that the images implicitly exist solely for research purposes).
+In technical literature, there exist two ground truth datasets commonly used right now. One by Shen and Zheng [9] which is informally distributed alongside their code<sup>5</sup>, and one by Grosse *et al.* [12] in a dedicated page<sup>7</sup>. To the best of my knowledge, both are freely distributed without a license (it is of my understanding that the images implicitly exist solely for research purposes).
 
 As a part of the toolbox, I've included Tan and Ikeuchi's<sup>2</sup> [4], Shen *et al.*'s<sup>3</sup> [6] and Shen and Zheng's<sup>5</sup> [9] test images in [`images`](https://github.com/vitorsr/SIHR/tree/master/images).
 
@@ -111,51 +105,39 @@ As a part of the toolbox, I've included Tan and Ikeuchi's<sup>2</sup> [4], Shen 
 
 Quantitative results reported are usually regarding the quality of the recovered diffuse component with respect to the ground truth available in the Shen and Zheng [9] test image set.
 
-#### Highest self and peer-reported PSNR results (in dB)
+Reproduced results below are available in the [`utils/my_quality.m`](https://github.com/vitorsr/SIHR/blob/master/utils/my_clip.m) script.
 
-|Year| Method             | *animals* | *cups*   | *fruit*   | *masks*  |
-|:--:|--------------------|:---------:|:--------:|:---------:|:--------:|
-|2005| Tan and Ikeuchi    | 30.2      | 30.1     | 29.6      | 25.6     |
-|2006| Yoon *et al.*      | -         | -        | -         | -        |
-|2008| Shen *et al.*      | 34.6      | 37.7     | 37.6      | 31.7     |
-|2009| Shen and Cai       | 34.8      | 37.6     | 36.9      | 34.0     |
-|2010| Yang *et al.*      | *37.2*    | 38.0     | 37.6      | 32.2     |
-|2013| Shen and Zheng     | **37.3**  | **39.3** | *38.9*    | 34.1     |
-|2015| Liu *et al.*       | 33.4      | 37.6     | 35.1      | **34.5** |
-|2016| Akashi and Okatani | 26.8      | 35.7     | 30.8      | 32.3     |
-|2016| Suo *et al.*       | -         | -        | **40.4**  | 34.2     |
-|2017| Ren *et al.*       | -         | 38.0     | 37.7      | **34.5** |
-|2018| Guo *et al.*       | 35.7      | *39.1*   | 36.4      | *34.4*   |
+#### Highest (self and peer-reported | reproduced) PSNR results (in dB)
 
-#### Reproduced PSNR results (in dB)
+|Year| Method             | *animals* | *cups*    | *fruit*   | *masks*   | Reproduced         | *animals* | *cups* | *fruit* | *masks* |
+|:--:|--------------------|:---------:|:---------:|:---------:|:---------:|--------------------|:---------:|:------:|:-------:|:-------:|
+|2005| Tan and Ikeuchi    | 30.2      | 30.1      | 29.6      | 25.6      | Tan and Ikeuchi    | 30.4      | 31.6   | 30.4    | 25.8    |
+|2006| Yoon *et al.*      | -         | -         | -         | -         | Yoon *et al.*      | 32.9      | 33.3   | 36.6    | 34.1    |
+|2008| Shen *et al.*      | 34.6      | 37.7      | 37.6      | 31.7      | Shen *et al.*      | 34.2      | 37.5   | 38.0    | 32.1    |
+|2009| Shen and Cai       | 34.8      | 37.6      | 36.9      | 34.0      | Shen and Cai       | 34.9      | 37.6   | 36.7    | 34.0    |
+|2010| Yang *et al.*      | *37.2*    | 38.0      | 37.6      | 32.2      | Yang *et al.*      | 36.5      | 37.5   | 36.2    | 33.5    |
+|2013| Shen and Zheng     | **37.3**  | **39.3**  | *38.9*    | 34.1      | Shen and Zheng     | 37.5      | 38.3   | 38.2    | 32.7    |
+|2015| Liu *et al.*       | 33.4      | 37.6      | 35.1      | **34.5**  | -                  | -         | -      | -       | -       |
+|2016| Akashi and Okatani | 26.8      | 35.7      | 30.8      | 32.3      | Akashi and Okatani | 32.7      | 35.9   | 34.8    | 34.0    |
+|2016| Suo *et al.*       | -         | -         | **40.4**  | 34.2      | -                  | -         | -      | -       | -       |
+|2017| Ren *et al.*       | -         | 38.0      | 37.7      | **34.5**  | -                  | -         | -      | -       | -       |
+|2018| Guo *et al.*       | 35.7      | *39.1*    | 36.4      | *34.4*    | -                  | -         | -      | -       | -       |
 
-TODO 19/08: N/A.
+#### Highest (self and peer-reported | reproduced) SSIM results
 
-#### Highest self and peer-reported SSIM results
-
-|Year| Method             | *animals* | *cups*    | *fruit*   | *masks*   |
-|:--:|--------------------|:---------:|:---------:|:---------:|:---------:|
-|2005| Tan and Ikeuchi    | 0.929     | 0.767     | 0.912     | 0.789     |
-|2006| Yoon *et al.*      | -         | -         | -         | -         |
-|2008| Shen *et al.*      | *0.974*   | 0.962     | **0.961** | *0.943*   |
-|2009| Shen and Cai       | -         | -         | -         | -         |
-|2010| Yang *et al.*      | 0.970     | 0.941     | 0.939     | 0.899     |
-|2013| Shen and Zheng     | 0.971     | **0.966** | *0.960*   | 0.941     |
-|2015| Liu *et al.*       | -         | -         | -         | -         |
-|2016| Akashi and Okatani | 0.802     | 0.937     | 0.765     | 0.657     |
-|2016| Suo *et al.*       | -         | -         | -         | -         |
-|2017| Ren *et al.*       | 0.896     | 0.957     | 0.952     | 0.913     |
-|2018| Guo *et al.*       | **0.975** | *0.963*   | 0.930     | **0.955** |
-
-#### Reproduced SSIM results
-
-TODO 19/08: N/A.
-
-### Runtime
-
-#### Current runtime (in s)
-
-TODO 19/08: N/A.
+|Year| Method             | *animals* | *cups*    | *fruit*   | *masks*   | Reproduced         | *animals* | *cups* | *fruit* | *masks* |
+|:--:|--------------------|:---------:|:---------:|:---------:|:---------:|--------------------|:---------:|:------:|:-------:|:-------:|
+|2005| Tan and Ikeuchi    | 0.929     | 0.767     | 0.912     | 0.789     | Tan and Ikeuchi    | 0.928     | 0.895  | 0.907   | 0.821   |
+|2006| Yoon *et al.*      | -         | -         | -         | -         | Yoon *et al.*      | 0.980     | 0.961  | 0.961   | 0.953   |
+|2008| Shen *et al.*      | *0.974*   | 0.962     | **0.961** | *0.943*   | Shen *et al.*      | 0.975     | 0.962  | 0.961   | 0.943   |
+|2009| Shen and Cai       | -         | -         | -         | -         | Shen and Cai       | 0.985     | 0.970  | 0.962   | 0.961   |
+|2010| Yang *et al.*      | 0.970     | 0.941     | 0.939     | 0.899     | Yang *et al.*      | 0.952     | 0.937  | 0.916   | 0.896   |
+|2013| Shen and Zheng     | 0.971     | **0.966** | *0.960*   | 0.941     | Shen and Zheng     | 0.985     | 0.964  | 0.958   | 0.935   |
+|2015| Liu *et al.*       | -         | -         | -         | -         | -                  | -         | -      | -       | -       |
+|2016| Akashi and Okatani | 0.802     | 0.937     | 0.765     | 0.657     | Akashi and Okatani | 0.7340    | 0.9190 | 0.9010  | 0.8710  |
+|2016| Suo *et al.*       | -         | -         | -         | -         | -                  | -         | -      | -       | -       |
+|2017| Ren *et al.*       | 0.896     | 0.957     | 0.952     | 0.913     | -                  | -         | -      | -       | -       |
+|2018| Guo *et al.*       | **0.975** | *0.963*   | 0.930     | **0.955** | -                  | -         | -      | -       | -       |
 
 ## References
 
@@ -181,9 +163,7 @@ TODO 19/08: N/A.
 
 1. Y. Akashi and T. Okatani, “Separation of reflection components by sparse non-negative matrix factorization,” Computer Vision and Image Understanding, vol. 146, pp. 77–85, May 2016 [Online]. Available: <http://dx.doi.org/10.1016/j.cviu.2015.09.001>
 
-1. J. Guo, Z. Zhou, and L. Wang, “Single Image Highlight Removal with a Sparse and Low-Rank Reflection Model,” in Computer Vision – ECCV 2018, Springer International Publishing, 2018, pp. 282–298 [Online]. Available: <http://dx.doi.org/10.1007/978-3-030-01225-0_17>
-
-1. T. Yamamoto, T. Kitajima, and R. Kawauchi, “Efficient improvement method for separation of reflection components based on an energy function,” in 2017 IEEE International Conference on Image Processing (ICIP), 2017 [Online]. Available: <http://dx.doi.org/10.1109/ICIP.2017.8297078>
+1. T. Yamamoto and A. Nakazawa, “General Improvement Method of Specular Component Separation Using High-Emphasis Filter and Similarity Function,” ITE Transactions on Media Technology and Applications, vol. 7, no. 2, pp. 92–102, 2019 [Online]. Available: <http://dx.doi.org/10.3169/mta.7.92>
 
 1. R. Grosse, M. K. Johnson, E. H. Adelson, and W. T. Freeman, “Ground truth dataset and baseline evaluations for intrinsic image algorithms,” in 2009 IEEE 12th International Conference on Computer Vision, 2009 [Online]. Available: <http://dx.doi.org/10.1109/ICCV.2009.5459428>
 

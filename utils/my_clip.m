@@ -1,3 +1,3 @@
-function Y = my_clip(X)
-Y = min(1,max(0,X));
+function Y = my_clip(X, lb, ub)
+Y = min(ub, max(lb, X));
 end

@@ -7,7 +7,7 @@
 
 This document has the purpose of informing how to effectively contribute to this repository.
 
-This repository (SIHR) is intented for reproduction and development of single image highlight removal methods, so the biggest challenge isn't even coding, rather, reading the related research papers and *deciphering* how to implement them.
+This repository (`SIHR`) is intented for reproduction and development of single image highlight removal methods, so the biggest challenge isn't even coding, rather, reading the related research papers and *deciphering* how to implement them.
 
 So, please don't feel overwhelmed by the amount of minute detail on contributing, it's mostly to give an overview should you need additional information on general MATLAB/GNU Octave development.
 
@@ -19,7 +19,9 @@ In the first section (below) I'll put down a few words on non-code contributions
 
 ## Call for collaboration
 
-If you'd like to collaborate on a survey on this specific subject, please contact me. You can find contact information [here](#contact). I have set up a [SIHR group on Mendeley ![Mendeley](icons.iconarchive.com/icons/alecive/flatwoken/16/Apps-Mendeley-icon.png)](https://www.mendeley.com/community/sihr/) for this purpose.
+If you'd like to collaborate on a survey on this specific subject, please contact me. You can find contact information [here](#contact). I have set up a SIHR interest group on [Mendeley ![Mendeley](https://cdn1.iconfinder.com/data/icons/simple-icons/16/mendeley-16-black.png)](https://www.mendeley.com/community/sihr/) for this purpose.
+
+<!-- https://www.iconfinder.com/icons/167730/mendeley_icon -->
 
 ## Issues
 
@@ -34,6 +36,8 @@ As the methods are single-input, single-output, general testing and functionalit
 Additionally on a general note, I expect that new methods contributed fulfill the `I_d = AuthorYEAR(I);` command, `I` being any input image of numeric floating-point class `single | double` representing linear RGB values in `[0, 1]` and size *M*×*N*×3, *M* and *N* non-zero, non-singleton, positive integers, and `I_d` the corresponding diffuse image of same class, domain and dimension.
 
 In short: double RGB image in, double RGB image out.
+
+Note: there is a [`utils/my_quality.m`](https://github.com/vitorsr/SIHR/blob/master/utils/my_clip.m) script to reproduce reported quality results. Be warned that `Tan2005`, `Yoon2006` and `Akashi2016` run very slowly on Octave (lots of iterations).
 
 ## Submitting changes
 
