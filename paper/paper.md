@@ -24,7 +24,7 @@ bibliography: paper.bib
 
 Single image highlight removal (SIHR) refers to an open problem in computer vision concerning separation of diffuse and specular reflection components from a single image [@Tan2014]. It is an intrinsic image decomposition, so it has several applications. Recently, there was an interest renewal in this problem for the objective of image enhancement in visual display systems such as TVs [@Yamamoto2017].
 
-![Example decomposition. (a\) Input, (b\) diffuse, and (c\) specular reflection components](figures/example.jpg)
+![Example decomposition. (a\) Input, (b\) diffuse, and (c\) specular reflection components](figures/example.png)
 
 The primary objective of this toolbox is to serve as an aid for ongoing research and development of SIHR methods. Being written in such a high level language that is MATLAB/GNU Octave allows easier understanding of inner workings of these methods. To the best of our knowledge, the resources available to further the understanding of this specific problem are relatively scarce.
 
