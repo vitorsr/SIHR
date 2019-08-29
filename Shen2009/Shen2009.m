@@ -1,9 +1,13 @@
 function I_d = Shen2009(I)
 %Shen2009 I_d = Shen2009(I)
-%  This implementation was at one point distributed by the author as a
-%  script. It was modified in order to conform with the toolbox and was
-%  incorporated for completion.
-%  
+%  This method works by finding the largest highlight area, dilating it to
+%  find the surrounding region, and then finding a coefficient that scales
+%  how much the pseudo specular component will be subtracted from the
+%  original image to find I_d.
+%
+%  The nomenclature is in accordance with the corresponding paper with
+%  exception of using I* instead of V* to denote an image.
+%
 %  See also SIHR, Shen2008, Shen2013.
 
 assert(isa(I, 'float'), 'SIHR:I:notTypeSingleNorDouble', ...
@@ -16,58 +20,37 @@ assert(n_row > 1 && n_col > 1, 'SIHR:I:singletonDimension', ...
 assert(n_ch == 3, 'SIHR:I:notRGB', ...
     'Input I is not a RGB image.')
 
-% Code for the following paper:
-% H. L. Shen, H. G. Zhang, S. J. Shao, and J. H. Xin, 
-% Simple and Efficient Method for Specularity Removal in an Image, 
-
-% clear; close all;
-
-% threshold_chroma = 0.03;
 nu = 0.5;
 
-% I = imread('images\4k.bmp');
-% I = double(I);
-[height, width, dim] = size(I);
+I = reshape(I, n_row*n_col, 3);
 
-I3c = reshape(I, height*width, 3);
-% tic;
-% calculate specular-free image
-Imin = min(I3c, [], 2);
-% Imax = max(I3c, [], 2);
-Ithresh = mean(Imin) + nu * std(Imin);
-% Iss = I3c - repmat(Imin, 1, 3) .* (Imin > Ithresh) + Ithresh * (Imin > Ithresh);
+% Calculate specular-free image
+I_min = min(I, [], 2);
+T_v = mean(I_min) + nu * std(I_min);
+% I_MSF = I - repmat(I_min, 1, 3) .* (I_min > T_v) + T_v * (I_min > T_v);
 
-% calculate specular component
-IBeta = (Imin - Ithresh) .* (Imin > Ithresh) + 0;
+% Calculate specular component
+beta_s = (I_min - T_v) .* (I_min > T_v) + 0;
 
-% estimate largest region of highlight
-IHighlight = reshape(IBeta, height, width, 1);
+% Estimate largest region of highlight
+IHighlight = reshape(beta_s, n_row, n_col, 1);
 IHighlight = mat2gray(IHighlight);
-IHighlight = im2bw(IHighlight, 0.1);
+IHighlight = im2bw(IHighlight, 0.1); %#ok
 IDominantRegion = bwareafilt(IHighlight, 1, 'largest');
 
-% dilate largest region by 5 pixels to obtain its surrounding region
-se = strel('square',5);
+% Dilate largest region by 5 pixels to obtain its surrounding region
+se = strel('square', 5);
 ISurroundingRegion = imdilate(IDominantRegion, se);
 ISurroundingRegion = logical(imabsdiff(ISurroundingRegion, IDominantRegion));
 
 % Solve least squares problem
-Vdom = mean(I3c(IDominantRegion, :));
-Vsur = mean(I3c(ISurroundingRegion, :));
-Betadom = mean(IBeta(IDominantRegion, :));
-Betasur = mean(IBeta(ISurroundingRegion, :));
-k = (Vsur - Vdom)/(Betasur - Betadom);
+I_dom = mean(I(IDominantRegion, :));
+I_sur = mean(I(ISurroundingRegion, :));
+beta_dom = mean(beta_s(IDominantRegion, :));
+beta_sur = mean(beta_s(ISurroundingRegion, :));
+k = (I_dom - I_sur) / (beta_dom - beta_sur);
 
 % Estimate diffuse and specular components
-I_d = reshape(I3c - min(k) * IBeta, height, width, dim);
-
-%figure; imshow(uint8(reshape(I3c, height, width, dim))); title('original'); 
-%figure; imshow(uint8(reshape(Idf, height, width, dim))); title('diffuse component');
-%figure; imshow(uint8(reshape(Isp, height, width, dim))); title('specular component');
-
-
-%imwrite(uint8(reshape(Idf, height, width, dim)), 'comp_df.bmp', 'bmp');
-%imwrite(uint8(reshape(Isp, height, width, dim)), 'comp_sp.bmp', 'bmp');
-% toc;
+I_d = reshape(I-min(k)*beta_s, n_row, n_col, n_ch);
 
 end

@@ -1,12 +1,13 @@
 function I_d = Yoon2006(I)
 %Yoon2006 I_d = Yoon2006(I)
-%  This is a very subjective implementation of Yoon's method by me (Vítor).
+%  This method operates by iteratively reducing or increasing a
+%  neighboring pixel intensity.
 %  
-%  It is ambiguous how they define neighborhood in which they operate, so I
+%  It is ambiguous how they define the neighborhood in which they operate, so I
 %  have assumed they mean the next pixel when the image is represented in a
 %  lexicographic order.
 %  
-%  It is specially slow in Octave because of the repeated iterated
+%  This method is specially slow in Octave because of the repeated iterated
 %  accesses. Should take 1 s, but takes 10+ on Octave/Linux and 30+ on
 %  Octave/Windows. Ideally it should be made into a vectorized
 %  implementation.
@@ -27,17 +28,17 @@ assert(n_row > 1 && n_col > 1, 'SIHR:I:singletonDimension', ...
 assert(n_ch == 3, 'SIHR:I:notRGB', ...
     'Input I is not a RGB image.')
 
-I_col = reshape(I, [n_row * n_col, n_ch]);
-Imin_col = min(I_col, [], 2);
-Isf_col = I_col - Imin_col;
+I = reshape(I, [n_row * n_col, n_ch]);
+I_min = min(I, [], 2);
+I_sf = I - I_min;
 
-Isfsum_col = sum(Isf_col, 2);
+sum_I_sf_ = sum(I_sf, 2);
 
-cr_col = Isf_col(:, 1) ./ Isfsum_col;
-cg_col = Isf_col(:, 2) ./ Isfsum_col;
+cr = I_sf(:, 1) ./ sum_I_sf_;
+cg = I_sf(:, 2) ./ sum_I_sf_;
 
-cr_col(isnan(cr_col)) = 0;
-cg_col(isnan(cg_col)) = 0;
+cr(isnan(cr)) = 0;
+cg(isnan(cg)) = 0;
 
 skip = false([n_row * n_col - 1, 1]);
 
@@ -50,28 +51,28 @@ count = uint32(0);
 iter = uint16(0);
 
 idx = (1:(n_row * n_col - 1))';
-skip(Isfsum_col(idx) == 0 ... % check if sum along rows ~= 0
-    | Isfsum_col(idx+1) == 0) = true;
-skip(abs(cr_col(idx)-cr_col(idx+1)) > th_r ... % check discontinuities
-    | abs(cg_col(idx)-cg_col(idx+1)) > th_g) = true;
+skip(sum_I_sf_(idx) == 0 ... % check if sum along rows ~= 0
+    | sum_I_sf_(idx+1) == 0) = true;
+skip(abs(cr(idx)-cr(idx+1)) > th_r ... % check discontinuities
+    | abs(cg(idx)-cg(idx+1)) > th_g) = true;
 skip((1:n_row-1)*n_col) = true;
-skip(Imin_col(idx) < 12/255) = true;
+skip(I_min(idx) < 12/255) = true;
 
 rd = ones([n_row * n_col - 1, 1]);
-rd(idx(~skip)) = sum(Isf_col(idx(~skip), :), 2) ...
-    ./ sum(Isf_col(idx(~skip)+1, :), 2);
+rd(idx(~skip)) = sum(I_sf(idx(~skip), :), 2) ...
+    ./ sum(I_sf(idx(~skip)+1, :), 2);
 
 rds = ones([n_row * n_col - 1, 1]);
 
 while true
-    rds(idx(~skip)) = sum(I_col((idx(~skip)), :), 2) ...
-        ./ sum(I_col((idx(~skip))+1, :), 2);
+    rds(idx(~skip)) = sum(I((idx(~skip)), :), 2) ...
+        ./ sum(I((idx(~skip))+1, :), 2);
     for x1 = 1:n_row * n_col - 1
         x2 = x1 + 1;
         if skip(x1)
             continue
-        elseif sum(I_col(x1,:), 2) == 0 || ...
-                sum(I_col(x2,:), 2) == 0 % || ...
+        elseif sum(I(x1,:), 2) == 0 || ...
+                sum(I(x2,:), 2) == 0 % || ...
             %        (abs(cr_col(x1)-cr_col(x2)) > th_r && ...
             %        abs(cg_col(x1)-cg_col(x2)) > th_g)
             skip(x1) = true;
@@ -79,19 +80,19 @@ while true
         end
         % compare ratios and decrease intensity
         if rds(x1) > rd(x1) % && rds ~= 1
-            m = sum(I_col(x1, :), 2) - rd(x1) * sum(I_col(x2, :), 2);
+            m = sum(I(x1, :), 2) - rd(x1) * sum(I(x2, :), 2);
             if m < 1e-3
                 continue
             end
-            I_col(x1, :) = I_col(x1, :)-m/3;
+            I(x1, :) = I(x1, :)-m/3;
             %skip(x1) = true;
             count = count + 1;
         elseif rds(x1) < rd(x1) % && rd(x1) ~= 1
-            m = sum(I_col(x2, :), 2) - sum(I_col(x1, :), 2) / rd(x1);
+            m = sum(I(x2, :), 2) - sum(I(x1, :), 2) / rd(x1);
             if m < 1e-3
                 continue
             end
-            I_col(x2, :) = I_col(x2, :)-m/3;
+            I(x2, :) = I(x2, :)-m/3;
             %skip(x2) = true;
             count = count + 1;
         end
@@ -103,6 +104,6 @@ while true
     iter = iter + 1;
 end
 
-I_d = reshape(I_col, [n_row, n_col, n_ch]);
+I_d = reshape(I, [n_row, n_col, n_ch]);
 
 end

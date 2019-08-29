@@ -6,7 +6,7 @@ function I_d = Yamamoto2019(I, AuthorYEAR)
 %  as a valid function handle, e.g. @Yang2010, @Shen2008.
 %
 %  Example:
-%    J = im2double(imread('synth.ppm'));
+%    J = im2double(imread('toys.ppm'));
 %    J_d = Yamamoto2019(J, @Yoon2006);
 %    imshow(J_d)
 %

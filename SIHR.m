@@ -16,7 +16,7 @@ function SIHR
 %    SIHR % run it for a one-time session path setup
 %
 %  API:
-%    J = im2double(imread('synth.ppm')); % input image
+%    J = im2double(imread('toys.ppm')); % input image
 %    J_d = Yang2010(J); % call AuthorYEAR method
 %                       % e.g. Yang2010
 %    imshow([J, J_d, J - J_d]) % display result
@@ -58,8 +58,8 @@ end
 if (is_octave)
     assert(isempty(pkg('list', 'image')) == 0) % && ...
     % isempty(pkg('list', 'statistics')) == 0)
-    pkg unload image statistics
-    pkg load image statistics
+    pkg unload image % statistics
+    pkg load image % statistics
 else
     assert(isequal(license('test', 'image_toolbox'), 1)) % && ...
     % isequal(license('test', 'statistics_toolbox'), 1))
