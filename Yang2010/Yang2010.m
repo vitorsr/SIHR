@@ -50,7 +50,7 @@ Imax = max(I, [], 3);
 
 den = (1 - 3 * sigmaMax);
 I_s = (Imax - sigmaMax .* total) ./ den;
-I_s(den == 0) = 0;
+I_s(den == 0) = max(I_s(den ~= 0));
 
 I_d = min(1, max(0, I-I_s));
 

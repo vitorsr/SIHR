@@ -1,4 +1,4 @@
-function [I_d, I_s] = Akashi2016(I)
+function I_d = Akashi2016(I)
 %Akashi2016 I_d = Akashi2016(I)
 %  The core mechanism is herein implemented fully in accordance with their
 %  paper. I have not implemented the repeated score trials. It is pending.
@@ -62,11 +62,11 @@ while true
 end
 % toc
 W_d = W(:, 2:end);
-h_s = H(1, :);
+% h_s = H(1, :);
 H_d = H(2:end, :);
-I_s = i_s * h_s;
+% I_s = i_s * h_s;
 I_d = W_d * H_d;
-I_s = reshape(full(I_s)', [n_row, n_col, n_ch]) / 255;
+% I_s = reshape(full(I_s)', [n_row, n_col, n_ch]) / 255;
 I_d = reshape(full(I_d)', [n_row, n_col, n_ch]) / 255;
 
 % figure(1), imshow(I_s)

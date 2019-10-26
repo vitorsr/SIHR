@@ -29,7 +29,7 @@ if nargin == 2
             'Input AuthorYEAR is not of type function_handle.')
         my_f = functions(AuthorYEAR);
         if isempty(my_f.file)
-            warning(['Undefined function ''', func2str(AuthorYEAR), '''.', newline, ...
+            warning(['Undefined function ''', func2str(AuthorYEAR), '''.', sprintf('\n'), ...
                 '         Defaulting to ''Shen2013''.'])
             AuthorYEAR = @Shen2013;
         end

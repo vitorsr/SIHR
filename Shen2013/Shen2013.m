@@ -1,5 +1,5 @@
-function [J_d, J_s] = Shen2013(J)
-%Shen2013 [J_d, J_s] = Shen2013(J)
+function J_d = Shen2013(J)
+%Shen2013 J_d = Shen2013(J)
 %  You can optionally edit the code to use kmeans instead of the clustering
 %  function proposed by the author.
 %  
@@ -94,7 +94,7 @@ for i = 1:N
     end
 end
 
-J_s = reshape(J_s, [height, width]);
+% J_s = reshape(J_s, [height, width]);
 J_d = reshape(J_d, [height, width, 3]);
 
 end

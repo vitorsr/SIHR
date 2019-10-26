@@ -1,6 +1,6 @@
 # SIHR: a MATLAB/GNU Octave toolbox for single image highlight removal
 
-[![DOI](https://zenodo.org/badge/156116891.svg)](https://zenodo.org/badge/latestdoi/156116891)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3381328.svg)](https://doi.org/10.5281/zenodo.3381328)
 [![license](https://img.shields.io/github/license/vitorsr/SIHR)](https://github.com/vitorsr/SIHR/blob/master/LICENSE)
 
 ## Summary
@@ -13,8 +13,7 @@ Highlight, specularity, or specular reflection removal (see <sup>1</sup> for a p
 
 I welcome and encourage contributions to this project upon review. Please check [`CONTRIBUTING.md`](CONTRIBUTING.md) for more details.
 
-*Disclaimer 1: this repository is intended for research purposes only.*
-
+*Disclaimer 1: this repository is intended for research purposes only.*  
 *Disclaimer 2: ~~some~~ most of these methods are based on chromaticity analysis, they fail **miserably** for grayscale images.*
 
 <sup>1</sup> `((remov* NEAR/1 (highlight* OR specular*)) OR (separat* NEAR/1 (reflect* OR specular*)))`
@@ -31,12 +30,13 @@ In this context, this repository aims to be a continous algorithmic aid for ongo
 <sup>5</sup> Shen and Zheng. [Online]. Available: <http://ivlab.org/publications/AO2013_code.zip>  
 <sup>6</sup> ~~https://blog.csdn.net/nvidiacuda/article/details/8078167~~ 
 
-## Usage
+## Usage (API)
 
 Calling this toolbox's functions is **very** straightforward:
+
 ```MATLAB
 I_d = AuthorYEAR(I); % I is a double-valued input image of dimension
-                     % M×N×3 containing linear RGB values and
+                     % m×n×3 containing linear RGB values and
                      % I_d is the calculated diffuse reflection
                      % using AuthorYEAR method.
                      % The specular component is simply
@@ -80,13 +80,22 @@ The environment this repository is being developed is:
     MATLAB 9.1 (R2016b)    Windows 10 1903
     MATLAB 9.6 (R2019a)    Windows 10 1903    Ubuntu 16.04 (MATLAB Online)
 
-### Instalation
+### Installation
 
-1. [`git clone`](https://github.com/vitorsr/SIHR.git) or [download](https://github.com/vitorsr/SIHR/archive/master.zip) the repository.
+1. `git clone https://github.com/vitorsr/SIHR.git` or [download](https://github.com/vitorsr/SIHR/archive/master.zip) a copy of the repository.
 1. Start Octave or MATLAB.
-    1. `cd('path/to/SIHR')` i.e. change current folder to `SIHR` root (where `SIHR.m` is located).
+    1. `cd('path/to/SIHR')`, i.e. change current folder to `SIHR` root (where `SIHR.m` is located).
     1. `run SIHR.m` for session path setup.
     1. `help SIHR` or `doc SIHR` provides a summary of the methods available.
+
+#### Additional Debian/Ubuntu installation
+
+To install the [`image`](https://octave.sourceforge.io/image/index.html) package from Octave Forge, `build-essential` and `liboctave-dev` need to be present. Install them via `apt`, then proceed with package installation.
+
+```bash
+sudo apt-get install -qq -y build-essential liboctave-dev
+octave --eval "pkg install -forge image"
+```
 
 ## Performance
 
@@ -108,7 +117,11 @@ Follow the instructions in [`images`](https://github.com/vitorsr/SIHR/tree/maste
 
 Quantitative results reported are usually regarding the quality of the recovered diffuse component with respect to the ground truth available in the Shen and Zheng [9] test image set.
 
+#### Automated testing
+
 Reproduced results below are available in the [`utils/my_quality.m`](https://github.com/vitorsr/SIHR/blob/master/utils/my_quality.m) script.
+
+Note: `ssim` is not available in Octave Forge `image`.
 
 #### Highest (self and peer-reported | reproduced) PSNR results (in dB)
 
