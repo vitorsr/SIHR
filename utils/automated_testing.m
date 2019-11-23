@@ -16,6 +16,7 @@ for i = 1:length(name)
     truth{i} = im2double(imread([name{i}, gt, ext]));
 end
 
+my_toc = zeros(length(method), length(name));
 my_psnr = zeros(length(method), length(name));
 if ~is_octave
     my_ssim = zeros(length(method), length(name));
@@ -25,7 +26,10 @@ for m = 1:length(method)
     disp(['Method ', func2str(method{m})])
     for i = 1:length(name)
         disp(['  Image ', name{i}])
+        tic
         I_d = feval(method{m}, image{i});
+        my_toc(m, i) = toc;
+        disp(['    Elapsed time ', num2str(my_toc(m, i)), ' s'])
         my_psnr(m, i) = psnr(I_d, truth{i});
         if ~is_octave
             my_ssim(m, i) = ssim(I_d, truth{i});

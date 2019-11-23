@@ -1,5 +1,5 @@
-function J_d = Shen2013(J)
-%Shen2013 J_d = Shen2013(J)
+function I_d = Shen2013(I)
+%Shen2013 I_d = Shen2013(I)
 %  You can optionally edit the code to use kmeans instead of the clustering
 %  function proposed by the author.
 %  
@@ -8,48 +8,48 @@ function J_d = Shen2013(J)
 %  
 %  See also SIHR, Shen2008, Shen2009.
 
-assert(isa(J, 'float'), 'SIHR:I:notTypeSingleNorDouble', ...
+assert(isa(I, 'float'), 'SIHR:I:notTypeSingleNorDouble', ...
     'Input I is not type single nor double.')
-assert(min(J(:)) >= 0 && max(J(:)) <= 1, 'SIHR:I:notWithinRange', ...
+assert(min(I(:)) >= 0 && max(I(:)) <= 1, 'SIHR:I:notWithinRange', ...
     'Input I is not within [0, 1] range.')
-[n_row, n_col, n_ch] = size(J);
+[n_row, n_col, n_ch] = size(I);
 assert(n_row > 1 && n_col > 1, 'SIHR:I:singletonDimension', ...
     'Input I has a singleton dimension.')
 assert(n_ch == 3, 'SIHR:I:notRGB', ...
     'Input I is not a RGB image.')
 
-height = size(J, 1);
-width = size(J, 2);
-J = reshape(J, [height * width, 3]);
+height = size(I, 1);
+width = size(I, 2);
+I = reshape(I, [height * width, 3]);
 
-Jmin = min(J, [], 2);
-Jmax = max(J, [], 2);
-Jran = Jmax - Jmin;
+Imin = min(I, [], 2);
+Imax = max(I, [], 2);
+Iran = Imax - Imin;
 
-umin_val = mean2(Jmin);
+umin_val = mean2(Imin);
 
-Jmask = Jmin > umin_val;
+Imask = Imin > umin_val;
 
-Jch_pseudo = zeros([height * width, 2]);
+Ich_pseudo = zeros([height * width, 2]);
 frgb = zeros([height * width, 3]);
 crgb = frgb;
 srgb = zeros([height * width, 1]);
 
-frgb(Jmask, :) = J(Jmask, :) - Jmin(Jmask) + umin_val;
-srgb(Jmask) = sum(frgb(Jmask, :), 2);
-crgb(Jmask, :) = frgb(Jmask, :) ./ srgb(Jmask);
+frgb(Imask, :) = I(Imask, :) - Imin(Imask) + umin_val;
+srgb(Imask) = sum(frgb(Imask, :), 2);
+crgb(Imask, :) = frgb(Imask, :) ./ srgb(Imask);
 
-Jch_pseudo(Jmask, 1) = min(min(crgb(Jmask, 1), crgb(Jmask, 2)), crgb(Jmask, 3));
-Jch_pseudo(Jmask, 2) = max(max(crgb(Jmask, 1), crgb(Jmask, 2)), crgb(Jmask, 3));
+Ich_pseudo(Imask, 1) = min(min(crgb(Imask, 1), crgb(Imask, 2)), crgb(Imask, 3));
+Ich_pseudo(Imask, 2) = max(max(crgb(Imask, 1), crgb(Imask, 2)), crgb(Imask, 3));
 
 % num_clust = 3;
-% Jclust = zeros([height * width, 1]);
-% Jclust(Jmask) = kmeans([Jch_pseudo(Jmask, 1), Jch_pseudo(Jmask, 2)], num_clust, 'Distance', 'cityblock', 'Replicates', ceil(sqrt(num_clust)));
+% Iclust = zeros([height * width, 1]);
+% Iclust(Imask) = kmeans([Ich_pseudo(Imask, 1), Ich_pseudo(Imask, 2)], num_clust, 'Distance', 'cityblock', 'Replicates', ceil(sqrt(num_clust)));
 th_chroma = 0.3;
-[Jclust, num_clust] = pixel_clustering(Jch_pseudo, Jmask, width, height, th_chroma);
+[Iclust, num_clust] = pixel_clustering(Ich_pseudo, Imask, width, height, th_chroma);
 
 ratio = zeros([height * width, 1]);
-Jratio = zeros([height * width, 1]);
+Iratio = zeros([height * width, 1]);
 
 N = width * height;
 EPS = 1e-10;
@@ -58,8 +58,8 @@ th_percent = 0.5;
 for k = 1:num_clust
     num = 0;
     for i = 1:N
-        if (Jclust(i) == k && Jran(i) > umin_val)
-            ratio(num+1) = Jmax(i) / (Jran(i) + EPS);
+        if (Iclust(i) == k && Iran(i) > umin_val)
+            ratio(num+1) = Imax(i) / (Iran(i) + EPS);
             num = num + 1;
         end
     end
@@ -72,35 +72,35 @@ for k = 1:num_clust
     ratio_est = tmp(round(num*th_percent)+1);
 
     for i = 1:N
-        if (Jclust(i) == k)
-            Jratio(i) = ratio_est;
+        if (Iclust(i) == k)
+            Iratio(i) = ratio_est;
         end
     end
 end
 
-J_s = zeros([height * width, 1]);
-J_d = J;
+I_s = zeros([height * width, 1]);
+I_d = I;
 
 for i = 1:N
-    if (Jmask(i) == 1)
-        uvalue = (Jmax(i) - Jratio(i) * Jran(i)); % round( . )
-        J_s(i) = max(uvalue, 0);
-        fvalue = J(i, 1) - J_s(i);
-        J_d(i, 1) = (clip(fvalue, 0, 1)); % round
-        fvalue = J(i, 2) - J_s(i);
-        J_d(i, 2) = (clip(fvalue, 0, 1)); % round
-        fvalue = J(i, 3) - J_s(i);
-        J_d(i, 3) = (clip(fvalue, 0, 1)); % round
+    if (Imask(i) == 1)
+        uvalue = (Imax(i) - Iratio(i) * Iran(i)); % round( . )
+        I_s(i) = max(uvalue, 0);
+        fvalue = I(i, 1) - I_s(i);
+        I_d(i, 1) = (clip(fvalue, 0, 1)); % round
+        fvalue = I(i, 2) - I_s(i);
+        I_d(i, 2) = (clip(fvalue, 0, 1)); % round
+        fvalue = I(i, 3) - I_s(i);
+        I_d(i, 3) = (clip(fvalue, 0, 1)); % round
     end
 end
 
-% J_s = reshape(J_s, [height, width]);
-J_d = reshape(J_d, [height, width, 3]);
+% I_s = reshape(I_s, [height, width]);
+I_d = reshape(I_d, [height, width, 3]);
 
 end
 
 
-function [Jclust, num_clust] = pixel_clustering(Jch_pseudo, Jmask, width, height, th_chroma)
+function [Iclust, num_clust] = pixel_clustering(Ich_pseudo, Imask, width, height, th_chroma)
 MAX_NUM_CLUST = 100;
 
 label = 0;
@@ -111,20 +111,20 @@ num_pixel = zeros([MAX_NUM_CLUST, 1]);
 
 N = width * height;
 
-Jdone = zeros([height * width, 1], 'logical');
-Jclust = zeros([height * width, 1], 'uint8');
+Idone = zeros([height * width, 1], 'logical');
+Iclust = zeros([height * width, 1], 'uint8');
 
 for i = 1:N
-    if (Jdone(i) == 0 && Jmask(i) == 1)
-        c(1) = Jch_pseudo(i, 1);
-        c(2) = Jch_pseudo(i, 2);
+    if (Idone(i) == 0 && Imask(i) == 1)
+        c(1) = Ich_pseudo(i, 1);
+        c(2) = Ich_pseudo(i, 2);
         label = label + 1;
         for j = i:N
-            if (Jdone(j) == 0 && Jmask(j) == 1)
-                dist = abs(c(1)-Jch_pseudo(j, 1)) + abs(c(2)-Jch_pseudo(j, 2));
+            if (Idone(j) == 0 && Imask(j) == 1)
+                dist = abs(c(1)-Ich_pseudo(j, 1)) + abs(c(2)-Ich_pseudo(j, 2));
                 if (dist < th_chroma)
-                    Jdone(j) = 1;
-                    Jclust(j) = label;
+                    Idone(j) = 1;
+                    Iclust(j) = label;
                 end
             end
         end
@@ -138,11 +138,11 @@ if num_clust > MAX_NUM_CLUST
 end
 
 for i = 1:N
-    k = Jclust(i);
+    k = Iclust(i);
     if (k >= 1 && k <= num_clust)
         num_pixel(k) = num_pixel(k) + 1;
-        clust_mean(k, 1) = clust_mean(k, 1) + Jch_pseudo(i, 1);
-        clust_mean(k, 2) = clust_mean(k, 2) + Jch_pseudo(i, 2);
+        clust_mean(k, 1) = clust_mean(k, 1) + Ich_pseudo(i, 1);
+        clust_mean(k, 2) = clust_mean(k, 2) + Ich_pseudo(i, 2);
     end
 end
 
@@ -152,9 +152,9 @@ for k = 1:num_clust
 end
 
 for i = 1:N
-    if Jmask(i) == 1
-        c(1) = Jch_pseudo(i, 1);
-        c(2) = Jch_pseudo(i, 2);
+    if Imask(i) == 1
+        c(1) = Ich_pseudo(i, 1);
+        c(2) = Ich_pseudo(i, 2);
         dist_min = abs(c(1)-clust_mean(2, 1)) + abs(c(2)-clust_mean(2, 2));
         label = 1;
         for k = 2:num_clust
@@ -164,7 +164,7 @@ for i = 1:N
                 label = k;
             end
         end
-        Jclust(i) = label;
+        Iclust(i) = label;
     end
 end
 

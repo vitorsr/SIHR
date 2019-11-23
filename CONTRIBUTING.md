@@ -33,11 +33,11 @@ Since we're a small community and this is a rather small repository, feel free t
 
 As the methods are single-input, single-output, general testing and functionality verification is done by simply invoking the methods' functions with a valid input.
 
-Additionally on a general note, I expect that new methods contributed fulfill the `I_d = AuthorYEAR(I);` command, `I` being any input image of numeric floating-point class `single | double` representing linear RGB values in `[0, 1]` and size *M*×*N*×3, *M* and *N* non-zero, non-singleton, positive integers, and `I_d` the corresponding diffuse image of same class, domain and dimension.
+Additionally on a general note, I expect that new methods contributed fulfill the `I_d = AuthorYEAR(I);` command, `I` being any input image of numeric floating-point class `single | double` representing linear RGB values in `[0, 1]` and size *m*×*n*×3, *m* and *n* non-zero, non-singleton, positive integers, and `I_d` the corresponding diffuse image of same class, domain and dimension.
 
 In short: double RGB image in, double RGB image out.
 
-Note: there is a [`utils/my_quality.m`](https://github.com/vitorsr/SIHR/blob/master/utils/my_clip.m) script to reproduce reported quality results. Be warned that `Tan2005`, `Yoon2006` and `Akashi2016` run very slowly on Octave (lots of iterations).
+Note: there is a [`utils/automated_testing.m`](https://github.com/vitorsr/SIHR/blob/master/utils/my_clip.m) script to reproduce reported quality results. Be warned that `Tan2005`, `Yoon2006` and `Akashi2016` run very slowly on Octave (lots of iterations).
 
 ## Submitting changes
 

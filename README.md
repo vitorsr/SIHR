@@ -119,7 +119,7 @@ Quantitative results reported are usually regarding the quality of the recovered
 
 #### Automated testing
 
-Reproduced results below are available in the [`utils/my_quality.m`](https://github.com/vitorsr/SIHR/blob/master/utils/my_quality.m) script.
+Reproduced results below are available in the [`utils/automated_testing.m`](https://github.com/vitorsr/SIHR/blob/master/utils/automated_testing.m) script.
 
 Note: `ssim` is not available in Octave Forge `image`.
 
@@ -154,6 +154,20 @@ Note: `ssim` is not available in Octave Forge `image`.
 |2016| Suo *et al.*       | -         | -         | -         | -         | -            | -         | -      | -       | -       |
 |2017| Ren *et al.*       | 0.896     | 0.957     | 0.952     | 0.913     | -            | -         | -      | -       | -       |
 |2018| Guo *et al.*       | **0.975** | *0.963*   | 0.930     | **0.955** | -            | -         | -      | -       | -       |
+
+#### Expected running time (in seconds)
+
+Note: results for MATLAB R2019b, Intel i5-8250U CPU, and 24 GB DDR4 2400 MHz RAM.
+
+|Year| Reproduced   | *animals* | *cups*   | *fruit*   | *masks*   |
+|:--:|--------------|:---------:|:--------:|:---------:|:---------:|
+|2005| `Tan2005`    | 67.0      | 170.0    | 210.0     | 190.0     |
+|2006| `Yoon2006`   | 2.8       | 1.6      | 2.6       | 3.4       |
+|2008| `Shen2008`   | 1.9       | 7.8      | 4.3       | 4.9       |
+|2009| `Shen2009`   | 0.9       | **0.05** | **0.041** | **0.029** |
+|2010| `Yang2010`   | *0.31*    | 0.13     | 0.11      | 0.081     |
+|2013| `Shen2013`   | **0.043** | *0.071*  | *0.083*   | *0.056*   |
+|2016| `Akashi2016` | 140.0     | 170.0    | 230.0     | 200.0     |
 
 ## References
 
