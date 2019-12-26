@@ -15,7 +15,7 @@ authors:
     orcid: 0000-0002-7583-5577
     affiliation: 1
 affiliations:
- - name: Federal University of Rio Grande do Norte
+ - name: Federal University of Rio Grande do Norte, Natal, Brazil
    index: 1
 date: 23 November 2019
 bibliography: paper.bib
@@ -29,11 +29,11 @@ Single image highlight removal (SIHR) refers to an open problem in computer visi
 
 The primary objective of this toolbox is to serve as an aid for ongoing research and development of SIHR methods. Being written in such a high-level language that is MATLAB/GNU Octave allows an easier understanding of the inner workings of these methods. To the best of our knowledge, the resources available to further the understanding of this specific problem are relatively scarce.
 
-Hence, we have started ``SIHR`` to implement and gather several different methods from technical literature--starting from the most performing ones, since the abovementioned systems operate on a limited computing budget and need timely processing. Other methods of interest can be found in recent surveys [@Artusi2011; @Khan2017].
+Hence, we have started ``SIHR`` to implement and gather several different methods from technical literature--starting with the most computationally efficient ones, since the abovementioned systems operate on a limited computing budget and need timely processing. Other methods of interest can be found in recent surveys [@Artusi2011; @Khan2017].
 
 Usage is rather straightforward as the focus of these methods is to work with only a single linear RGB image, i.e. an *m*×*n*×3 matrix. For uniformity, we ask the image to be double-valued. In ``SIHR``, calls are simply ``I_d = AuthorYEAR(I);``, in which ``I`` is the original image and ``I_d`` is the diffuse component estimate calculated by the ``AuthorYEAR`` method. The specular component is ``I_s = I - I_d;``.
 
-As of time of writing, the following methods are available. We refer to the ``SIHR`` documentation for the latest list of methods available.
+At the time of writing, the methods listed in Table 1 are available. We refer to the ``SIHR`` documentation for the latest list of methods available.
 
 | Function      | Method        | PSNR (dB) | SSIM  | Runtime (s) |
 |:-------------:|:-------------:|:---------:|:-----:|:-----------:|
@@ -55,6 +55,6 @@ Table: List of improvements in `SIHR`
 
 Figure 1 presents an actual result of a method from technical literature which was implemented in ``SIHR``. In Table 1, the reproduced metrics are from the @Shen2013 dataset, and were averaged--for each metric--for all four images.
 
-``SIHR`` aims to be a continuous project and welcomes community contributions. The source code for ``SIHR`` is being archived by Zenodo since its pre-release version [@Ramos2019].
+``SIHR`` aims to be a continuous project and welcomes community contributions.
 
 # References
