@@ -1,7 +1,26 @@
 # SIHR: a MATLAB/GNU Octave toolbox for single image highlight removal
 
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.01822/status.svg)](https://doi.org/10.21105/joss.01822)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3381328.svg)](https://doi.org/10.5281/zenodo.3381328)
 [![license](https://img.shields.io/github/license/vitorsr/SIHR)](https://github.com/vitorsr/SIHR/blob/master/LICENSE)
+
+## Citation
+
+```BibTeX
+@article{Ramos2020,
+  doi = {10.21105/joss.01822},
+  url = {https://doi.org/10.21105/joss.01822},
+  year = {2020},
+  month = jan,
+  publisher = {The Open Journal},
+  volume = {5},
+  number = {45},
+  pages = {1822},
+  author = {V{\'{\i}}tor Ramos},
+  title = {{SIHR}: a {MATLAB}/{GNU} {Octave} toolbox for single image highlight removal},
+  journal = {Journal of Open Source Software}
+}
+```
 
 ## Summary
 
